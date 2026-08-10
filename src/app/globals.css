@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+/* next-themes marca o tema com uma classe no <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Fontes do sistema, de propósito.
+ *
+ * O app é usado dentro da igreja, muitas vezes em 3G ruim. Baixar fonte no
+ * primeiro acesso atrasa a tela e causa salto de layout justo na hora em que
+ * alguém está tentando ler em voz alta. As fontes do sistema já estão no
+ * aparelho, renderizam português com acentuação perfeita e aparecem na hora.
+ */
+@theme {
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', 'Droid Serif', serif;
+}
+
+:root {
+  --fundo: #faf8f5;
+  --superficie: #ffffff;
+  --superficie-2: #f3f0ea;
+  --tinta: #1a1a18;
+  --tinta-suave: #5c584f;
+  --tinta-fraca: #86817a;
+  --borda: #e3ddd2;
+  --realce: #7c2d12;
+
+  --verde: #15803d;
+  --branco: #a16207;
+  --vermelho: #b91c1c;
+  --roxo: #6d28d9;
+  --rosa: #be185d;
+}
+
+/*
+ * Tema escuro de verdade — quase preto, não cinza.
+ *
+ * Numa igreja com luz baixa, um fundo cinza-escuro ainda ilumina o rosto de
+ * quem segura o celular e incomoda quem está atrás. Preto profundo com texto
+ * quente resolve, e ainda economiza bateria em tela OLED.
+ */
+.dark {
+  --fundo: #0b0b0d;
+  --superficie: #141417;
+  --superficie-2: #1d1d21;
+  --tinta: #ece9e3;
+  --tinta-suave: #a8a49b;
+  --tinta-fraca: #78746c;
+  --borda: #2b2b31;
+  --realce: #fbbf24;
+
+  --verde: #4ade80;
+  --branco: #fbbf24;
+  --vermelho: #f87171;
+  --roxo: #c084fc;
+  --rosa: #f9a8d4;
+}
+
+@theme inline {
+  --color-fundo: var(--fundo);
+  --color-superficie: var(--superficie);
+  --color-superficie-2: var(--superficie-2);
+  --color-tinta: var(--tinta);
+  --color-tinta-suave: var(--tinta-suave);
+  --color-tinta-fraca: var(--tinta-fraca);
+  --color-borda: var(--borda);
+  --color-realce: var(--realce);
+
+  --color-lit-verde: var(--verde);
+  --color-lit-branco: var(--branco);
+  --color-lit-vermelho: var(--vermelho);
+  --color-lit-roxo: var(--roxo);
+  --color-lit-rosa: var(--rosa);
+}
+
+html {
+  background-color: var(--fundo);
+  /* Impede o iOS de aumentar a fonte sozinho ao girar o aparelho. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--font-sans);
+  /* Sem rolagem horizontal: a tela é estreita e a leitura é vertical. */
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+/* O alvo de toque mínimo confortável, inclusive para mão trêmula. */
+button,
+a,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--realce);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Corpo de leitura.
+ *
+ * `--escala-leitura` é ajustada pelo controle de tamanho de fonte e guardada no
+ * aparelho. Serifada e com entrelinha larga: estes textos são proclamados em
+ * voz alta, e quem lê precisa achar a linha seguinte sem perder o lugar.
+ */
+.corpo-leitura {
+  font-family: var(--font-serif);
+  font-size: calc(1.125rem * var(--escala-leitura, 1));
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+.corpo-leitura p {
+  margin-bottom: 1.1em;
+}
+
+.corpo-leitura p:last-child {
+  margin-bottom: 0;
+}
+
+/* Área segura do iPhone: a barra de abas não pode ficar sob o indicador. */
+.pb-segura {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-segura {
+  padding-top: env(safe-area-inset-top, 0px);
+}

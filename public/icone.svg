@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Liturgia">
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7f1d1d" />
+      <stop offset="1" stop-color="#4c1010" />
+    </linearGradient>
+    <linearGradient id="ouro" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fde68a" />
+      <stop offset="0.55" stop-color="#f0b429" />
+      <stop offset="1" stop-color="#c98a12" />
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#fundo)" />
+
+  <!-- Hóstia com a cruz, irradiando -->
+  <g opacity="0.35" stroke="#fde68a" stroke-width="9" stroke-linecap="round">
+    <path d="M256 40v26M158 66l13 23M354 66l-13 23M92 136l22 14M420 136l-22 14" />
+  </g>
+  <circle cx="256" cy="150" r="60" fill="url(#ouro)" />
+  <path d="M256 116v68M222 150h68" stroke="#7f1d1d" stroke-width="15" stroke-linecap="round" />
+
+  <!-- Cálice -->
+  <path
+    d="M150 246h212c0 62-38 106-88 116v52h52c9 0 16 7 16 16s-7 16-16 16H186c-9 0-16-7-16-16s7-16 16-16h52v-52c-50-10-88-54-88-116z"
+    fill="url(#ouro)"
+  />
+  <path d="M150 246h212" stroke="#7f1d1d" stroke-width="14" stroke-linecap="round" />
+</svg>
