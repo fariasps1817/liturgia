@@ -3,6 +3,7 @@ import 'server-only';
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import type { LiturgiaDoDia } from '../liturgia/tipos';
+import { ErroAoGerarPreces, traduzirErroDaApi } from './erros';
 import { EsquemaDasPreces } from './esquema';
 import { montarPromptDoDia, SISTEMA_PRECES } from './prompt';
 import { ORDEM_DAS_SERIES, RESPOSTA_PADRAO, type ConteudoDasPreces, type SerieDeIntencao } from './tipos';
@@ -17,7 +18,9 @@ export const MODELO = process.env.MODELO_IA ?? 'claude-opus-5';
  */
 const MAX_TOKENS = 16_000;
 
-export class ErroAoGerarPreces extends Error {}
+// Reexportado porque a rota sempre importou o erro daqui, e quem gera preces
+// não precisa saber que a tradução das falhas mora noutro arquivo.
+export { ErroAoGerarPreces };
 
 let clientePreguicoso: Anthropic | null = null;
 
@@ -39,20 +42,22 @@ async function umaTentativa(
 ): Promise<ConteudoDasPreces> {
   const prompt = montarPromptDoDia(liturgia, resposta, intencaoLocal);
 
-  const mensagem = await cliente().messages.parse({
-    model: MODELO,
-    max_tokens: MAX_TOKENS,
-    // O prompt de sistema é estável entre gerações; marcá-lo faz o cache do
-    // prefixo valer a partir da segunda missa do dia.
-    system: [
-      { type: 'text', text: SISTEMA_PRECES, cache_control: { type: 'ephemeral' } },
-    ],
-    output_config: {
-      effort: 'medium',
-      format: zodOutputFormat(EsquemaDasPreces),
-    },
-    messages: [{ role: 'user', content: reforco ? `${prompt}\n\n${reforco}` : prompt }],
-  });
+  const mensagem = await cliente()
+    .messages.parse({
+      model: MODELO,
+      max_tokens: MAX_TOKENS,
+      // O prompt de sistema é estável entre gerações; marcá-lo faz o cache do
+      // prefixo valer a partir da segunda missa do dia.
+      system: [
+        { type: 'text', text: SISTEMA_PRECES, cache_control: { type: 'ephemeral' } },
+      ],
+      output_config: {
+        effort: 'medium',
+        format: zodOutputFormat(EsquemaDasPreces),
+      },
+      messages: [{ role: 'user', content: reforco ? `${prompt}\n\n${reforco}` : prompt }],
+    })
+    .catch((causa) => traduzirErroDaApi(causa, MODELO));
 
   // O Opus 5 pode recusar por classificadores de segurança. Em texto litúrgico
   // isso é remotíssimo, mas ler `content` sem conferir quebraria a tela.

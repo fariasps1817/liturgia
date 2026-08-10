@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "verificar": "tsx scripts/verificar-calendario.ts && tsx scripts/verificar-normalizador.ts && tsx scripts/verificar-pix.ts",
+    "verificar": "tsx scripts/verificar-calendario.ts && tsx scripts/verificar-normalizador.ts && tsx scripts/verificar-erros-de-preces.ts && tsx scripts/verificar-pix.ts",
     "sondar": "tsx scripts/sondar-liturgia.ts",
     "icones": "tsx scripts/gerar-icones.ts"
   },
