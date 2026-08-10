@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 import { createClient, type Client } from '@libsql/client';
 import { COMUNIDADE_PADRAO, type ConteudoDasPreces, type Preces } from './tipos';
 
@@ -28,10 +30,28 @@ function urlDoBanco(): string {
   return 'file:.dados/preces.db';
 }
 
+/**
+ * Cria a pasta do arquivo SQLite, que o libSQL não cria sozinho.
+ *
+ * Sem isso ele falha com "Unable to open connection ... : 14" — e falha tarde,
+ * em `salvarPreces`, com as preces já geradas e pagas, que se perdem. Como
+ * `.dados/` é ignorada pelo git, isso acontecia em todo clone novo: justamente
+ * o caminho que o README promete que funciona sem configurar nada.
+ */
+function prepararPasta(url: string): void {
+  if (!url.startsWith('file:')) return;
+  const caminho = url.slice('file:'.length).split('?')[0];
+  const pasta = dirname(caminho);
+  if (pasta && pasta !== '.') mkdirSync(pasta, { recursive: true });
+}
+
 async function cliente(): Promise<Client> {
   clientePromessa ??= (async () => {
+    const url = urlDoBanco();
+    prepararPasta(url);
+
     const c = createClient({
-      url: urlDoBanco(),
+      url,
       authToken: process.env.TURSO_AUTH_TOKEN,
     });
 
