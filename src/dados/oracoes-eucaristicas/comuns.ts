@@ -55,7 +55,8 @@ export const SANTO: Secao = {
   id: 'santo',
   titulo: 'Santo',
   quem: 'assembleia',
-  texto: `Santo, Santo, Santo, Senhor, Deus do universo!
+  texto: `Santo, Santo, Santo,
+Senhor, Deus do universo.
 O céu e a terra proclamam a vossa glória.
 Hosana nas alturas!
 Bendito o que vem em nome do Senhor!
@@ -111,7 +112,7 @@ export const DOXOLOGIA: Secao[] = [
     id: 'doxologia',
     titulo: 'Doxologia final',
     quem: 'presidente',
-    incipit: 'Por Cristo, com Cristo, em Cristo…',
+    incipit: 'Por Cristo, com Cristo, e em Cristo…',
     nota: 'O sacerdote eleva a patena com a hóstia e o cálice.',
   },
   {

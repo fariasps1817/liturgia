@@ -129,7 +129,15 @@ const OE_I: OracaoEucaristica = {
 
 /**
  * Oração Eucarística II — a mais usada no Brasil.
- * Breve, com prefácio próprio, adequada aos dias de semana.
+ *
+ * Conferida contra o texto da 3ª edição típica (2023) trazido pelo diácono da
+ * paróquia, e cotejada com uma edição publicada da mesma oração. É a única das
+ * cinco cujos incipits não são de memória.
+ *
+ * Traz **cinco aclamações próprias da assembleia** ao longo da oração, além
+ * das comuns. Elas faltavam aqui — e são justamente o que esta tela existe
+ * para mostrar. Sem elas o app dizia, por omissão, que a assembleia fica calada
+ * da consagração até o Amém, o que é falso na forma como se celebra no Brasil.
  */
 const OE_II: OracaoEucaristica = {
   id: 'oe-ii',
@@ -142,7 +150,7 @@ const OE_II: OracaoEucaristica = {
       id: 'ii-prefacio',
       titulo: 'Prefácio',
       quem: 'presidente',
-      incipit: 'Na verdade, é justo e necessário, é nosso dever e salvação…',
+      incipit: 'Na verdade, é digno e justo, é nosso dever e salvação dar-vos graças…',
       nota: 'A OE II tem prefácio próprio, mas admite outros prefácios do tempo.',
     },
     SANTO,
@@ -150,15 +158,21 @@ const OE_II: OracaoEucaristica = {
       id: 'ii-pos-sanctus',
       titulo: 'Pós-Sanctus',
       quem: 'presidente',
-      incipit: 'Na verdade, ó Pai, vós sois santo e fonte de toda santidade…',
+      incipit: 'Na verdade, ó Pai, vós sois Santo, fonte de toda santidade.',
       nota: 'A assembleia já está ajoelhada.',
     },
     {
       id: 'ii-epiclese',
       titulo: 'Epiclese',
       quem: 'presidente',
-      incipit: 'Santificai estes dons, derramando sobre eles o vosso Espírito…',
+      incipit: 'Santificai, pois, estes dons, derramando sobre eles o vosso Espírito…',
       nota: 'O sacerdote estende as mãos sobre as oferendas.',
+    },
+    {
+      id: 'ii-aclamacao-epiclese',
+      titulo: 'Aclamação após a epiclese',
+      quem: 'assembleia',
+      texto: 'Enviai o vosso Espírito Santo!',
     },
     {
       id: 'ii-instituicao',
@@ -172,20 +186,57 @@ const OE_II: OracaoEucaristica = {
       id: 'ii-anamnese',
       titulo: 'Anamnese e Oferenda',
       quem: 'presidente',
-      incipit: 'Celebrando, pois, a memória da morte e ressurreição do vosso Filho…',
+      incipit: 'Celebrando, pois, o memorial da morte e ressurreição do vosso Filho…',
+    },
+    {
+      id: 'ii-aclamacao-oferta',
+      titulo: 'Aclamação após a oferenda',
+      quem: 'assembleia',
+      texto: 'Aceitai, ó Senhor, a nossa oferta!',
     },
     {
       id: 'ii-epiclese-comunhao',
       titulo: 'Epiclese da comunhão',
       quem: 'presidente',
-      incipit: 'E nós vos suplicamos que, participando do Corpo e Sangue de Cristo…',
+      incipit: 'Suplicantes, vos pedimos que, participando do Corpo e Sangue de Cristo…',
     },
     {
-      id: 'ii-intercessoes',
-      titulo: 'Intercessões',
+      id: 'ii-aclamacao-corpo',
+      titulo: 'Aclamação após a epiclese da comunhão',
+      quem: 'assembleia',
+      texto: 'O Espírito nos una num só corpo!',
+    },
+    {
+      id: 'ii-intercessoes-igreja',
+      titulo: 'Intercessões pela Igreja',
       quem: 'presidente',
-      incipit: 'Lembrai-vos, ó Pai, da vossa Igreja que se faz presente…',
-      nota: 'Aqui entram o Papa, o bispo diocesano e os falecidos.',
+      incipit: 'Lembrai-vos, ó Pai, da vossa Igreja que se faz presente pelo mundo inteiro…',
+      nota: 'Aqui entram o Papa e o bispo diocesano. Em Missa com Batismo, Crisma, Primeira Comunhão, Unção ou Matrimônio, entra também uma intercessão própria, seguida de "Lembrai-vos, ó Pai, dos vossos filhos!".',
+    },
+    {
+      id: 'ii-aclamacao-igreja',
+      titulo: 'Aclamação após as intercessões pela Igreja',
+      quem: 'assembleia',
+      texto: 'Lembrai-vos, ó Pai, da vossa Igreja!',
+    },
+    {
+      id: 'ii-intercessoes-defuntos',
+      titulo: 'Intercessões pelos falecidos',
+      quem: 'presidente',
+      incipit: 'Lembrai-vos também, na vossa misericórdia, dos nossos irmãos e irmãs…',
+    },
+    {
+      id: 'ii-aclamacao-defuntos',
+      titulo: 'Aclamação após as intercessões pelos falecidos',
+      quem: 'assembleia',
+      texto: 'Concedei-lhes, ó Senhor, a luz eterna!',
+    },
+    {
+      id: 'ii-intercessoes-todos',
+      titulo: 'Intercessão por todos nós',
+      quem: 'presidente',
+      incipit: 'Enfim, nós vos pedimos, tende piedade de todos nós…',
+      nota: 'Recorda a Virgem Maria, São José, os Apóstolos e o santo do dia ou padroeiro.',
     },
     ...DOXOLOGIA,
   ],
