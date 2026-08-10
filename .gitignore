@@ -54,3 +54,7 @@ next-env.d.ts
 # Textos do Missal preenchidos pela paróquia. Os direitos da tradução são da
 # CNBB: o texto fica na máquina de quem preencheu, não no repositório.
 /missal.local.txt
+
+# PDFs e textos do Missal trazidos pela equipe: mesma razão do
+# missal.local.txt — os direitos da tradução são da CNBB.
+/docs/*.pdf
