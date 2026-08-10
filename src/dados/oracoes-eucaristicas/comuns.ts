@@ -64,43 +64,33 @@ Hosana nas alturas!`,
 };
 
 /**
- * As três fórmulas do Mistério da Fé — cada convite com a sua resposta.
+ * As três fórmulas do Mistério da Fé.
  *
- * O pareamento é a informação que importa, e é o que estava errado aqui antes:
- * havia um convite só, seguido das três respostas soltas. Mas a resposta não é
- * escolha da assembleia — ela é determinada pelo convite que o sacerdote puxa.
- * Listadas soltas, a assembleia hesita exatamente no instante em que deveria
- * responder de imediato, logo após a elevação do cálice.
+ * A resposta não é escolha da assembleia: ela decorre do chamado que o
+ * sacerdote puxa. Por isso o chamado vai no **título** de cada resposta — é
+ * assim que se procura na hora, logo após a elevação do cálice: ouve-se o
+ * chamado e busca-se o cartão que o traz.
  *
- * O convite antigo, "Eis o mistério da fé", era o da tradução anterior e não
- * está mais no Missal: a 3ª edição típica em português traz as três fórmulas
- * abaixo. Por isso os pares vão emparelhados e com o mesmo título.
+ * Não há cartão separado para a fala do sacerdote. Já houve, um para cada
+ * chamado, e virou seis cartões com os títulos repetidos dois a dois — longo
+ * de rolar e confuso justamente no instante em que se tem menos tempo.
+ *
+ * O chamado antigo, "Eis o mistério da fé", era o da tradução anterior e não
+ * está mais no Missal: a 3ª edição típica em português traz estes três.
  */
 export const MISTERIO_DA_FE: Secao[] = [
   {
-    id: 'misterio-convite-1',
-    titulo: 'Mistério da Fé — 1ª fórmula',
-    quem: 'presidente',
-    incipit: 'Mistério da fé!',
-    nota: 'Logo após a elevação do cálice. O sacerdote escolhe uma das três fórmulas; a assembleia responde a que corresponde a ela.',
-  },
-  {
-    id: 'misterio-r1',
-    titulo: 'Mistério da Fé — 1ª fórmula',
+    id: 'misterio-1',
+    titulo: 'Chamado: Mistério da fé!',
     quem: 'assembleia',
     texto: `Anunciamos, Senhor, a vossa morte
 e proclamamos a vossa ressurreição.
 Vinde, Senhor Jesus!`,
+    nota: 'Logo após a elevação do cálice. O sacerdote escolhe um dos três chamados; procure abaixo o que ele disser.',
   },
   {
-    id: 'misterio-convite-2',
-    titulo: 'Mistério da Fé — 2ª fórmula',
-    quem: 'presidente',
-    incipit: 'Mistério da fé e do amor!',
-  },
-  {
-    id: 'misterio-r2',
-    titulo: 'Mistério da Fé — 2ª fórmula',
+    id: 'misterio-2',
+    titulo: 'Chamado: Mistério da fé e do amor!',
     quem: 'assembleia',
     texto: `Todas as vezes que comemos deste pão
 e bebemos deste cálice,
@@ -108,14 +98,8 @@ anunciamos, Senhor, a vossa morte,
 enquanto esperamos a vossa vinda!`,
   },
   {
-    id: 'misterio-convite-3',
-    titulo: 'Mistério da Fé — 3ª fórmula',
-    quem: 'presidente',
-    incipit: 'Mistério da fé para a salvação do mundo!',
-  },
-  {
-    id: 'misterio-r3',
-    titulo: 'Mistério da Fé — 3ª fórmula',
+    id: 'misterio-3',
+    titulo: 'Chamado: Mistério da fé para a salvação do mundo!',
     quem: 'assembleia',
     texto: `Salvador do mundo, salvai-nos,
 vós que nos libertastes pela cruz e ressurreição.`,

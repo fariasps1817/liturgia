@@ -225,15 +225,20 @@ function BlocoDaSecao({
         marcada ? '' : resposta ? 'border-borda' : ''
       }`}
     >
-      <div className="mb-1.5 flex items-center gap-2">
+      {/*
+        O título quebra linha em vez de truncar: nos cartões do Mistério da Fé
+        ele carrega o chamado do celebrante, que é justamente por onde se
+        procura a resposta. Cortado no meio, não serve para procurar nada.
+      */}
+      <div className="mb-1.5 flex items-start gap-2">
         <span
-          className={`text-[0.6875rem] font-bold uppercase tracking-wider ${
+          className={`shrink-0 text-[0.6875rem] font-bold uppercase tracking-wider ${
             resposta ? 'text-realce' : 'text-tinta-fraca'
           }`}
         >
           {ROTULO_DE_QUEM[secao.quem]}
         </span>
-        <span className="truncate text-[0.6875rem] uppercase tracking-wide text-tinta-fraca">
+        <span className="text-[0.6875rem] uppercase tracking-wide text-tinta-fraca">
           {secao.titulo}
         </span>
         {/*

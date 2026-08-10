@@ -7,9 +7,9 @@
  * texto, um convite sem a resposta correspondente, uma parte que sumiu da
  * sequência.
  *
- * O caso que deu origem a este script: o Mistério da Fé tinha um convite só,
+ * O caso que deu origem a este script: o Mistério da Fé tinha um chamado só,
  * seguido das três respostas soltas. Ninguém percebe olhando a tela — ela
- * mostra tudo bonito — mas a resposta é determinada pelo convite que o
+ * mostra tudo bonito — mas a resposta é determinada pelo chamado que o
  * sacerdote puxa, e o app deixava a assembleia escolher.
  *
  *   npm run verificar
@@ -49,7 +49,7 @@ for (const oracao of ORACOES_EUCARISTICAS) {
 
   // A consagração vem antes do Mistério da Fé, e este antes da doxologia.
   const instituicao = oracao.secoes.findIndex((s) => /Narrativa da Institui/.test(s.titulo));
-  const misterio = ids.indexOf('misterio-convite-1');
+  const misterio = ids.indexOf('misterio-1');
   const doxologia = ids.indexOf('doxologia');
   conferir(`${oracao.numero}: Mistério da Fé depois da consagração`, misterio > instituicao, true);
   conferir(`${oracao.numero}: doxologia depois do Mistério da Fé`, doxologia > misterio, true);
@@ -73,49 +73,42 @@ for (const oracao of ORACOES_EUCARISTICAS) {
   );
 }
 
-console.log('\n— Mistério da Fé: cada convite com a SUA resposta —');
+console.log('\n— Mistério da Fé: o chamado no título da resposta —');
 {
   /*
-   * A regra que o app violava: as três fórmulas são pares. O sacerdote escolhe
-   * o convite e a resposta decorre dele — a assembleia não escolhe. Aqui se
-   * confere que cada convite é seguido imediatamente pela resposta de mesmo
-   * título, e que são três pares, não um convite e três respostas.
+   * A resposta decorre do chamado que o sacerdote puxa — a assembleia não
+   * escolhe. Como se procura pelo que se ouviu, o chamado precisa estar no
+   * título do cartão: um cartão por fórmula, e não um para o chamado e outro
+   * para a resposta, que foi por onde esta tela já passou e ficou confusa.
    */
-  const secoes = ORACOES_EUCARISTICAS[0].secoes;
-  const doMisterio = secoes.filter((s) => s.titulo.startsWith('Mistério da Fé'));
+  const doMisterio = ORACOES_EUCARISTICAS[0].secoes.filter((s) => /Mist[ée]rio da f[ée]/i.test(s.titulo));
 
-  conferir('são seis seções — três pares', doMisterio.length, 6);
+  conferir('três seções — uma por fórmula', doMisterio.length, 3);
+  conferir('todas são resposta da assembleia', doMisterio.every(ehResposta), true);
 
-  const convites = doMisterio.filter((s) => !ehResposta(s));
-  const respostas = doMisterio.filter((s) => ehResposta(s));
-  conferir('três convites', convites.length, 3);
-  conferir('três respostas', respostas.length, 3);
-
-  for (let i = 0; i < doMisterio.length; i += 2) {
-    const convite = doMisterio[i];
-    const resposta = doMisterio[i + 1];
-    const par = `${i / 2 + 1}º par`;
-    conferir(`${par}: convite antes da resposta`, !ehResposta(convite) && ehResposta(resposta), true);
-    conferir(`${par}: mesmo título nos dois`, convite.titulo, resposta.titulo);
-  }
-
-  // Pareamento exato, como está no Missal.
+  // Pareamento exato, como está no Missal: título traz o chamado, corpo traz a
+  // resposta que lhe corresponde.
   const esperado: [string, string][] = [
-    ['Mistério da fé!', 'Anunciamos, Senhor, a vossa morte'],
-    ['Mistério da fé e do amor!', 'Todas as vezes que comemos deste pão'],
-    ['Mistério da fé para a salvação do mundo!', 'Salvador do mundo, salvai-nos'],
+    ['Chamado: Mistério da fé!', 'Anunciamos, Senhor, a vossa morte'],
+    ['Chamado: Mistério da fé e do amor!', 'Todas as vezes que comemos deste pão'],
+    ['Chamado: Mistério da fé para a salvação do mundo!', 'Salvador do mundo, salvai-nos'],
   ];
-  esperado.forEach(([convite, inicioDaResposta], i) => {
-    conferir(`convite ${i + 1}`, convites[i]?.incipit, convite);
-    conferir(`resposta ${i + 1} começa certo`, respostas[i]?.texto?.startsWith(inicioDaResposta), true);
+  esperado.forEach(([titulo, inicioDaResposta], i) => {
+    conferir(`fórmula ${i + 1}: chamado no título`, doMisterio[i]?.titulo, titulo);
+    conferir(
+      `fórmula ${i + 1}: resposta que lhe corresponde`,
+      doMisterio[i]?.texto?.startsWith(inicioDaResposta),
+      true,
+    );
   });
 }
 
 console.log('\n— Fórmulas que saíram do Missal não podem voltar —');
 {
-  // "Eis o mistério da fé" era a tradução anterior. Ficou onze meses no app.
+  // "Eis o mistério da fé" era a tradução anterior. Varre também o título, que
+  // é onde o chamado passou a morar — senão a fórmula velha volta por ali.
   const todas: Secao[] = ORACOES_EUCARISTICAS.flatMap((o) => o.secoes);
-  const tudo = todas.map((s) => `${s.incipit ?? ''} ${s.texto ?? ''}`).join(' ');
+  const tudo = todas.map((s) => `${s.titulo} ${s.incipit ?? ''} ${s.texto ?? ''}`).join(' ');
   conferir('"Eis o mistério da fé" não aparece', /Eis o mist[ée]rio da f[ée]/i.test(tudo), false);
 }
 
