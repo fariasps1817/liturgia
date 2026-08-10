@@ -202,10 +202,20 @@ export function PainelDePreces({ data, dataExtenso }: { data: string; dataExtens
         <>
           <article className="corpo-leitura space-y-5">
             <section>
-              <h2 className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-tinta-fraca not-italic">
-                Monição do celebrante
-              </h2>
               <p>{preces.introducao}</p>
+            </section>
+
+            {/*
+              A resposta aparece só aqui, uma vez. Repetida embaixo de cada
+              intenção ela dobrava o tamanho da tela e empurrava as intenções
+              para fora do alcance do polegar — e a assembleia responde sempre
+              a mesma coisa, que quem proclama já sabe de cor depois da primeira.
+            */}
+            <section>
+              <p className="rounded-2xl border border-borda bg-superficie-2 px-4 py-3 font-semibold text-tinta not-italic">
+                <span className="mr-1.5 text-realce">R.</span>
+                {preces.resposta}
+              </p>
             </section>
 
             <section>
@@ -219,19 +229,12 @@ export function PainelDePreces({ data, dataExtenso }: { data: string; dataExtens
                       {i + 1}. {ROTULO_DA_SERIE[intencao.serie] ?? intencao.serie}
                     </p>
                     <p>{intencao.texto}</p>
-                    <p className="mt-1.5 font-semibold text-tinta-suave">
-                      <span className="mr-1.5 text-realce">R.</span>
-                      {preces.resposta}
-                    </p>
                   </li>
                 ))}
               </ol>
             </section>
 
             <section>
-              <h2 className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-tinta-fraca not-italic">
-                Oração conclusiva
-              </h2>
               <p>{preces.conclusao}</p>
             </section>
           </article>
@@ -288,12 +291,26 @@ export function PainelDePreces({ data, dataExtenso }: { data: string; dataExtens
   );
 }
 
-/** Texto das preces para a área de transferência e o WhatsApp. */
+/**
+ * Texto das preces para a área de transferência e o WhatsApp.
+ *
+ * Acompanha a tela: a resposta vem uma vez, antes das intenções. Repetida a
+ * cada uma, a mensagem no grupo da equipe ficava com o dobro do tamanho e
+ * quase toda ela era a mesma linha.
+ */
 function formatarPreces(preces: Preces, dataExtenso: string): string {
-  const linhas = ['*PRECES DA ASSEMBLEIA*', dataExtenso, '', preces.introducao, ''];
+  const linhas = [
+    '*PRECES DA ASSEMBLEIA*',
+    dataExtenso,
+    '',
+    preces.introducao,
+    '',
+    `_R. ${preces.resposta}_`,
+    '',
+  ];
 
   preces.intencoes.forEach((intencao, i) => {
-    linhas.push(`${i + 1}. ${intencao.texto}`, `_R. ${preces.resposta}_`, '');
+    linhas.push(`${i + 1}. ${intencao.texto}`, '');
   });
 
   linhas.push(preces.conclusao);
