@@ -62,8 +62,9 @@ for (const oracao of ORACOES_EUCARISTICAS) {
   conferir(`${oracao.numero}: termina no Amém`, ids[ids.length - 1], 'amem');
 
   // A consagração vem antes do Mistério da Fé, e este antes da doxologia.
+  // A OE V tem fórmula própria, então procura-se pelo título, não pelo id.
   const instituicao = oracao.secoes.findIndex((s) => /Narrativa da Institui/.test(s.titulo));
-  const misterio = ids.indexOf('misterio-1');
+  const misterio = oracao.secoes.findIndex((s) => /Mist[ée]rio da F[ée]/i.test(s.titulo));
   const doxologia = ids.indexOf('doxologia');
   conferir(`${oracao.numero}: Mistério da Fé depois da consagração`, misterio > instituicao, true);
   conferir(`${oracao.numero}: doxologia depois do Mistério da Fé`, doxologia > misterio, true);
@@ -115,6 +116,47 @@ console.log('\n— Mistério da Fé: o chamado no título da resposta —');
       true,
     );
   });
+}
+
+console.log('\n— A OE V tem Mistério da Fé próprio —');
+{
+  /*
+   * A armadilha: por sete commits a OE V usou as três fórmulas comuns, que não
+   * são as dela. O celebrante diz "Tudo isto é mistério da fé!" e a resposta é
+   * outra — quem chegasse à tela com as fórmulas comuns responderia errado.
+   */
+  const v = ORACOES_EUCARISTICAS.find((o) => o.id === 'oe-v')!;
+  const misterio = v.secoes.filter((s) => /Mist[ée]rio da F[ée]/i.test(s.titulo));
+
+  conferir('são duas seções, não seis', misterio.length, 2);
+  conferir('o chamado é o próprio dela', misterio[0]?.incipit, 'Tudo isto é mistério da fé!');
+  conferir(
+    'a resposta é a própria dela',
+    misterio[1]?.texto?.startsWith('Toda vez que comemos deste Pão'),
+    true,
+  );
+  conferir('não usa as fórmulas comuns', v.secoes.some((s) => s.id.startsWith('misterio-')), false);
+}
+
+console.log('\n— As aclamações da assembleia, que faltavam nas cinco —');
+{
+  /*
+   * O app já afirmou, por omissão, que a assembleia fica calada da consagração
+   * até o Amém. Cada oração tem as suas; nenhuma tem menos de quatro fora as
+   * comuns. Se este número cair, alguma sumiu.
+   */
+  const minimo: Record<string, number> = { 'oe-i': 7, 'oe-ii': 5, 'oe-iii': 5, 'oe-iv': 7, 'oe-v': 7 };
+  for (const oracao of ORACOES_EUCARISTICAS) {
+    const proprias = oracao.secoes.filter(
+      (s) => ehResposta(s) && !['santo', 'amem'].includes(s.id) && !s.id.startsWith('dialogo') && !/Mist[ée]rio da F[ée]/i.test(s.titulo),
+    );
+    conferir(`${oracao.numero}: aclamações próprias`, proprias.length, minimo[oracao.id]);
+    conferir(
+      `${oracao.numero}: todas com texto`,
+      proprias.every((s) => Boolean(s.texto?.trim())),
+      true,
+    );
+  }
 }
 
 console.log('\n— Fórmulas que saíram do Missal não podem voltar —');

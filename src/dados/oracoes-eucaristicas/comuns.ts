@@ -107,6 +107,18 @@ vós que nos libertastes pela cruz e ressurreição.`,
   },
 ];
 
+/**
+ * Aclamação da assembleia no meio da oração.
+ *
+ * No Brasil as Orações Eucarísticas são entrecortadas por aclamações do povo —
+ * de quatro a oito, conforme a oração. Não são enfeite: são as falas que este
+ * app existe para pôr em letra grande. O id muda de oração para oração porque
+ * a mesma aclamação aparece em pontos diferentes de cada uma.
+ */
+export function aclamacao(id: string, texto: string, titulo = 'Aclamação da assembleia'): Secao {
+  return { id, titulo, quem: 'assembleia', texto };
+}
+
 export const DOXOLOGIA: Secao[] = [
   {
     id: 'doxologia',

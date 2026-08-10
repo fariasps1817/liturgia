@@ -1,32 +1,39 @@
-import { DIALOGO, DOXOLOGIA, MISTERIO_DA_FE, SANTO } from './comuns';
+import { aclamacao, DIALOGO, DOXOLOGIA, MISTERIO_DA_FE, SANTO } from './comuns';
 import type { OracaoEucaristica } from './tipos';
 
 /**
- * Aviso comum às duas orações acrescentadas depois (I e IV).
+ * As cinco Orações Eucarísticas, conferidas com a 3ª edição típica (2023).
  *
- * A estrutura, a ordem das partes, as rubricas e as respostas da assembleia são
- * firmes. Os incipits do celebrante, não: foram escritos de memória do Missal
- * brasileiro e nenhum foi cotejado com um exemplar impresso. Numa deixa que
- * alguém segue ao vivo, "quase certo" não serve — daí a marca em cada um.
+ * A fonte é o texto trazido pelo diácono da paróquia, uma oração por arquivo,
+ * cotejado com uma edição publicada da OE II e da OE III. Antes disto os
+ * incipits da I e da IV eram de memória — e a conferência mostrou que estavam
+ * errados em quase todos: "Confessamos, ó Pai, a vossa grandeza" era "Nós
+ * proclamamos vossa grandeza, Pai santo". Nada aqui é mais de memória.
+ *
+ * # O que mais mudou com a conferência
+ *
+ * As aclamações da assembleia. O app tinha só as comuns — diálogo, Santo,
+ * Mistério da Fé e Amém — e afirmava, por omissão, que o povo fica calado da
+ * consagração até o fim. É falso: cada oração é entrecortada por aclamações
+ * próprias, de quatro a oito, e elas são exatamente a razão de ser desta tela.
+ *
+ * O texto integral do celebrante não mora aqui: fica em `missal.local.txt`,
+ * fora do repositório, porque a tradução é da CNBB. Aqui só o incipit, que
+ * serve de deixa a quem acompanha.
  */
-const AVISO_INCIPITS_NAO_CONFERIDOS =
-  'As primeiras palavras das falas do celebrante ainda não foram conferidas com o Missal impresso — cada uma está marcada abaixo. A ordem das partes, as rubricas e as respostas da assembleia estão corretas.';
 
 /**
  * Oração Eucarística I — o Cânon Romano.
  *
  * A mais antiga e a mais longa. Estrutura diferente de todas as outras: as
- * intercessões não ficam num bloco só no fim — vêm partidas em duas, pelos
- * vivos antes da consagração e pelos falecidos depois, cada uma com o seu
- * momento de silêncio. É por isso que ela vale a pena aqui: quem acompanha se
- * perde justamente nesses trechos, que não têm paralelo na II nem na III.
+ * intercessões não ficam num bloco só no fim — vêm partidas, pelos vivos antes
+ * da consagração e pelos falecidos depois. É onde quem acompanha se perde.
  */
 const OE_I: OracaoEucaristica = {
   id: 'oe-i',
   numero: 'I',
   nome: 'Oração Eucarística I (Cânon Romano)',
   quando: 'Solenidades e dias festivos. A mais antiga e a mais longa.',
-  avisoDeRevisao: AVISO_INCIPITS_NAO_CONFERIDOS,
   secoes: [
     ...DIALOGO,
     {
@@ -43,85 +50,88 @@ const OE_I: OracaoEucaristica = {
       quem: 'presidente',
       incipit: 'Pai de misericórdia, a quem sobem nossos louvores…',
       nota: 'Pede pela Igreja, pelo Papa e pelo bispo diocesano.',
-      conferir: true,
     },
+    aclamacao('i-aclamacao-oferenda', 'Abençoai nossa oferenda, ó Senhor!'),
     {
       id: 'i-memento-vivos',
       titulo: 'Memento dos vivos',
       quem: 'presidente',
-      incipit: 'Lembrai-vos, ó Pai, dos vossos filhos e filhas…',
+      incipit: 'Lembrai-vos, ó Pai, dos vossos filhos e filhas N. N. …',
       nota: 'Há um momento de silêncio: cada um reza pelos seus.',
-      conferir: true,
     },
+    aclamacao('i-aclamacao-vivos', 'Lembrai-vos, ó Pai, dos vossos filhos!'),
     {
       id: 'i-comunicantes',
       titulo: 'Comunicantes',
       quem: 'presidente',
-      incipit: 'Em comunhão com toda a Igreja, veneramos a memória…',
+      incipit: 'Em comunhão com toda a Igreja, celebramos em primeiro lugar a memória…',
       nota: 'A lista dos santos. Em algumas solenidades tem texto próprio, e pode ser abreviada.',
-      conferir: true,
     },
+    aclamacao('i-aclamacao-santos', 'Em comunhão com vossos Santos vos louvamos!'),
     {
       id: 'i-hanc-igitur',
       titulo: 'Oferenda da família reunida',
       quem: 'presidente',
-      incipit: 'Recebei, ó Pai, com bondade, esta oferenda…',
-      conferir: true,
+      incipit: 'Aceitai, ó Pai, com bondade, a oblação dos vossos servos…',
+      nota: 'Da Vigília Pascal ao 2º Domingo da Páscoa, e em Missa com Batismo, Crisma, Primeira Comunhão, Unção ou Matrimônio, tem texto próprio.',
     },
     {
       id: 'i-quam-oblationem',
       titulo: 'Epiclese',
       quem: 'presidente',
-      incipit: 'Dignai-vos, ó Deus, abençoar e aceitar esta oferenda…',
+      incipit: 'Dignai-vos, ó Pai, aceitar, abençoar e santificar estas oferendas…',
       nota: 'O sacerdote estende as mãos sobre as oferendas.',
-      conferir: true,
     },
+    aclamacao('i-aclamacao-epiclese', 'Enviai o vosso Espírito Santo!'),
     {
       id: 'i-instituicao',
       titulo: 'Narrativa da Instituição',
       quem: 'presidente',
-      incipit: 'Na véspera de sua paixão, ele tomou o pão…',
+      incipit: 'Na véspera de sua paixão, ele tomou o pão em suas santas e veneráveis mãos…',
       nota: 'Consagração do pão e do vinho, com as duas elevações.',
-      conferir: true,
     },
     ...MISTERIO_DA_FE,
     {
       id: 'i-anamnese',
       titulo: 'Anamnese e Oferenda',
       quem: 'presidente',
-      incipit: 'Celebrando, pois, a memória da paixão do vosso Filho…',
-      conferir: true,
+      incipit: 'Celebrando, pois, a memória da bem-aventurada paixão do vosso Filho…',
     },
     {
       id: 'i-supra-quae',
       titulo: 'Aceitação do sacrifício',
       quem: 'presidente',
-      incipit: 'Recebei, ó Pai, com olhar de bondade esta oferta…',
+      incipit: 'Recebei, ó Pai, com olhar benigno, esta oferta…',
       nota: 'Faz memória de Abel, de Abraão e de Melquisedeque.',
-      conferir: true,
     },
+    aclamacao('i-aclamacao-oferta', 'Aceitai, ó Senhor, a nossa oferta!'),
     {
       id: 'i-supplices',
       titulo: 'Súplica',
       quem: 'presidente',
-      incipit: 'Nós vos suplicamos, Deus todo-poderoso…',
-      conferir: true,
+      incipit: 'Suplicantes, vos pedimos, ó Deus onipotente…',
     },
+    aclamacao('i-aclamacao-corpo', 'O Espírito nos una num só corpo!'),
     {
       id: 'i-memento-mortos',
       titulo: 'Memento dos falecidos',
       quem: 'presidente',
-      incipit: 'Lembrai-vos também, ó Pai, dos vossos filhos e filhas que partiram…',
+      incipit: 'Lembrai-vos, ó Pai, dos vossos filhos e filhas N. N. que nos precederam…',
       nota: 'Segundo momento de silêncio: cada um reza pelos seus falecidos.',
-      conferir: true,
     },
+    aclamacao('i-aclamacao-defuntos', 'Concedei-lhes, ó Senhor, a luz eterna!'),
     {
       id: 'i-nobis-quoque',
       titulo: 'Intercessão pelos que servem ao altar',
       quem: 'presidente',
-      incipit: 'E a nós, pecadores, que confiamos na vossa imensa misericórdia…',
+      incipit: 'E a todos nós pecadores, que esperamos na vossa infinita misericórdia…',
       nota: 'O sacerdote bate no peito ao dizer as primeiras palavras.',
-      conferir: true,
+    },
+    {
+      id: 'i-per-quem',
+      titulo: 'Conclusão',
+      quem: 'presidente',
+      incipit: 'Por ele não cessais de criar, santificar, vivificar…',
     },
     ...DOXOLOGIA,
   ],
@@ -129,15 +139,7 @@ const OE_I: OracaoEucaristica = {
 
 /**
  * Oração Eucarística II — a mais usada no Brasil.
- *
- * Conferida contra o texto da 3ª edição típica (2023) trazido pelo diácono da
- * paróquia, e cotejada com uma edição publicada da mesma oração. É a única das
- * cinco cujos incipits não são de memória.
- *
- * Traz **cinco aclamações próprias da assembleia** ao longo da oração, além
- * das comuns. Elas faltavam aqui — e são justamente o que esta tela existe
- * para mostrar. Sem elas o app dizia, por omissão, que a assembleia fica calada
- * da consagração até o Amém, o que é falso na forma como se celebra no Brasil.
+ * Breve, com prefácio próprio, adequada aos dias de semana.
  */
 const OE_II: OracaoEucaristica = {
   id: 'oe-ii',
@@ -168,12 +170,7 @@ const OE_II: OracaoEucaristica = {
       incipit: 'Santificai, pois, estes dons, derramando sobre eles o vosso Espírito…',
       nota: 'O sacerdote estende as mãos sobre as oferendas.',
     },
-    {
-      id: 'ii-aclamacao-epiclese',
-      titulo: 'Aclamação após a epiclese',
-      quem: 'assembleia',
-      texto: 'Enviai o vosso Espírito Santo!',
-    },
+    aclamacao('ii-aclamacao-epiclese', 'Enviai o vosso Espírito Santo!'),
     {
       id: 'ii-instituicao',
       titulo: 'Narrativa da Instituição',
@@ -188,24 +185,14 @@ const OE_II: OracaoEucaristica = {
       quem: 'presidente',
       incipit: 'Celebrando, pois, o memorial da morte e ressurreição do vosso Filho…',
     },
-    {
-      id: 'ii-aclamacao-oferta',
-      titulo: 'Aclamação após a oferenda',
-      quem: 'assembleia',
-      texto: 'Aceitai, ó Senhor, a nossa oferta!',
-    },
+    aclamacao('ii-aclamacao-oferta', 'Aceitai, ó Senhor, a nossa oferta!'),
     {
       id: 'ii-epiclese-comunhao',
       titulo: 'Epiclese da comunhão',
       quem: 'presidente',
       incipit: 'Suplicantes, vos pedimos que, participando do Corpo e Sangue de Cristo…',
     },
-    {
-      id: 'ii-aclamacao-corpo',
-      titulo: 'Aclamação após a epiclese da comunhão',
-      quem: 'assembleia',
-      texto: 'O Espírito nos una num só corpo!',
-    },
+    aclamacao('ii-aclamacao-corpo', 'O Espírito nos una num só corpo!'),
     {
       id: 'ii-intercessoes-igreja',
       titulo: 'Intercessões pela Igreja',
@@ -213,24 +200,14 @@ const OE_II: OracaoEucaristica = {
       incipit: 'Lembrai-vos, ó Pai, da vossa Igreja que se faz presente pelo mundo inteiro…',
       nota: 'Aqui entram o Papa e o bispo diocesano. Em Missa com Batismo, Crisma, Primeira Comunhão, Unção ou Matrimônio, entra também uma intercessão própria, seguida de "Lembrai-vos, ó Pai, dos vossos filhos!".',
     },
-    {
-      id: 'ii-aclamacao-igreja',
-      titulo: 'Aclamação após as intercessões pela Igreja',
-      quem: 'assembleia',
-      texto: 'Lembrai-vos, ó Pai, da vossa Igreja!',
-    },
+    aclamacao('ii-aclamacao-igreja', 'Lembrai-vos, ó Pai, da vossa Igreja!'),
     {
       id: 'ii-intercessoes-defuntos',
       titulo: 'Intercessões pelos falecidos',
       quem: 'presidente',
       incipit: 'Lembrai-vos também, na vossa misericórdia, dos nossos irmãos e irmãs…',
     },
-    {
-      id: 'ii-aclamacao-defuntos',
-      titulo: 'Aclamação após as intercessões pelos falecidos',
-      quem: 'assembleia',
-      texto: 'Concedei-lhes, ó Senhor, a luz eterna!',
-    },
+    aclamacao('ii-aclamacao-defuntos', 'Concedei-lhes, ó Senhor, a luz eterna!'),
     {
       id: 'ii-intercessoes-todos',
       titulo: 'Intercessão por todos nós',
@@ -265,20 +242,21 @@ const OE_III: OracaoEucaristica = {
       id: 'iii-pos-sanctus',
       titulo: 'Pós-Sanctus',
       quem: 'presidente',
-      incipit: 'Na verdade, ó Pai, vós sois santo, e com razão vos louvam todas as vossas criaturas…',
+      incipit: 'Na verdade, vós sois Santo, ó Deus do universo…',
     },
     {
       id: 'iii-epiclese',
       titulo: 'Epiclese',
       quem: 'presidente',
-      incipit: 'Por isso, nós vos suplicamos: santificai pelo mesmo Espírito estes dons…',
+      incipit: 'Por isso, ó Pai, nós vos suplicamos: santificai pelo Espírito Santo…',
       nota: 'O sacerdote estende as mãos sobre as oferendas.',
     },
+    aclamacao('iii-aclamacao-epiclese', 'Enviai o vosso Espírito Santo!'),
     {
       id: 'iii-instituicao',
       titulo: 'Narrativa da Instituição',
       quem: 'presidente',
-      incipit: 'Na noite em que ia ser entregue, ele tomou o pão…',
+      incipit: 'Na noite em que ia ser entregue, Jesus tomou o pão…',
       nota: 'Consagração do pão e do vinho, com as duas elevações.',
     },
     ...MISTERIO_DA_FE,
@@ -286,20 +264,38 @@ const OE_III: OracaoEucaristica = {
       id: 'iii-anamnese',
       titulo: 'Anamnese e Oferenda',
       quem: 'presidente',
-      incipit: 'Celebrando agora, ó Pai, a memória do vosso Filho…',
+      incipit: 'Celebrando agora, ó Pai, o memorial da paixão redentora do vosso Filho…',
     },
+    aclamacao('iii-aclamacao-oferta', 'Aceitai, ó Senhor, a nossa oferta!'),
     {
       id: 'iii-epiclese-comunhao',
       titulo: 'Epiclese da comunhão',
       quem: 'presidente',
-      incipit: 'Olhai com bondade a oferenda da vossa Igreja…',
+      incipit: 'Olhai com bondade a oblação da vossa Igreja…',
     },
+    aclamacao('iii-aclamacao-corpo', 'O Espírito nos una num só corpo!'),
     {
-      id: 'iii-intercessoes',
-      titulo: 'Intercessões',
+      id: 'iii-intercessoes-oferenda',
+      titulo: 'Intercessão pelos eleitos',
       quem: 'presidente',
-      incipit: 'Que ele faça de nós uma oferenda perfeita…',
-      nota: 'Aqui entram o Papa, o bispo, os presentes e os falecidos.',
+      incipit: 'Que o mesmo Espírito faça de nós uma eterna oferenda…',
+      nota: 'Recorda a Virgem Maria, São José, os Apóstolos, os Mártires e o santo do dia.',
+    },
+    aclamacao('iii-aclamacao-oferenda', 'Fazei de nós uma perfeita oferenda!'),
+    {
+      id: 'iii-intercessoes-igreja',
+      titulo: 'Intercessões pela Igreja',
+      quem: 'presidente',
+      incipit: 'Nós vos suplicamos, Senhor, que este sacrifício da nossa reconciliação…',
+      nota: 'Aqui entram o Papa e o bispo diocesano. Em Missa com Batismo, Crisma, Primeira Comunhão ou Matrimônio, tem texto próprio.',
+    },
+    aclamacao('iii-aclamacao-igreja', 'Lembrai-vos, ó Pai, da vossa Igreja!'),
+    {
+      id: 'iii-intercessoes-defuntos',
+      titulo: 'Intercessões pelos falecidos',
+      quem: 'presidente',
+      incipit: 'Acolhei com bondade no vosso reino os nossos irmãos e irmãs…',
+      nota: 'Nas Missas pelos fiéis defuntos tem texto próprio, mais longo.',
     },
     ...DOXOLOGIA,
   ],
@@ -308,73 +304,90 @@ const OE_III: OracaoEucaristica = {
 /**
  * Oração Eucarística IV — a história da salvação inteira.
  *
- * O detalhe que mais pega a equipe de liturgia não é o texto: é que o prefácio
- * dela é **obrigatório e não se troca**. Por isso ela não entra nos dias em que
- * o próprio dia pede um prefácio — o que exclui boa parte do calendário.
+ * O detalhe que mais pega a equipe não é o texto: é que o prefácio dela é
+ * obrigatório e não se troca. Por isso ela não entra nos dias em que o próprio
+ * dia pede um prefácio — o que exclui boa parte do calendário.
  */
 const OE_IV: OracaoEucaristica = {
   id: 'oe-iv',
   numero: 'IV',
   nome: 'Oração Eucarística IV',
   quando: 'Tempo Comum, nos dias que não pedem prefácio próprio. Percorre toda a história da salvação.',
-  avisoDeRevisao: AVISO_INCIPITS_NAO_CONFERIDOS,
   secoes: [
     ...DIALOGO,
     {
       id: 'iv-prefacio',
       titulo: 'Prefácio próprio',
       quem: 'presidente',
-      incipit: 'Na verdade, é nosso dever e salvação dar-vos graças…',
+      incipit: 'Na verdade, ó Pai, é nosso dever dar-vos graças, é nossa salvação dar-vos glória…',
       nota: 'Obrigatório: esta oração não aceita outro prefácio. Por isso não se usa quando o dia tem prefácio próprio — domingos do Advento, da Quaresma e da Páscoa, solenidades e festas.',
-      conferir: true,
     },
     SANTO,
     {
       id: 'iv-pos-sanctus',
-      titulo: 'Pós-Sanctus — história da salvação',
+      titulo: 'Pós-Sanctus — a criação',
       quem: 'presidente',
-      incipit: 'Confessamos, ó Pai, a vossa grandeza…',
-      nota: 'A parte mais longa desta oração: percorre a criação, a aliança e os profetas. A assembleia fica ajoelhada um bom tempo aqui.',
-      conferir: true,
+      incipit: 'Nós proclamamos vossa grandeza, Pai santo…',
+      nota: 'A assembleia já está ajoelhada. Esta oração percorre a história da salvação em três blocos, cada um fechado por uma aclamação.',
     },
+    aclamacao('iv-aclamacao-criacao', 'A todos socorrestes com bondade!'),
+    {
+      id: 'iv-encarnacao',
+      titulo: 'A vinda do Filho',
+      quem: 'presidente',
+      incipit: 'E de tal modo, Pai santo, amastes o mundo…',
+    },
+    aclamacao('iv-aclamacao-filho', 'Por amor nos enviastes vosso Filho!'),
     {
       id: 'iv-epiclese',
       titulo: 'Epiclese',
       quem: 'presidente',
-      incipit: 'Santificai, ó Pai, estas oferendas pelo vosso Espírito…',
+      incipit: 'Por isso, nós vos pedimos, ó Pai, que o mesmo Espírito Santo…',
       nota: 'O sacerdote estende as mãos sobre as oferendas.',
-      conferir: true,
     },
+    aclamacao('iv-aclamacao-epiclese', 'Enviai o vosso Espírito Santo!'),
     {
       id: 'iv-instituicao',
       titulo: 'Narrativa da Instituição',
       quem: 'presidente',
-      incipit: 'Tendo amado os seus que estavam no mundo, amou-os até o fim…',
+      incipit: 'Quando, pois, chegou a hora em que por vós, ó Pai, ia ser glorificado…',
       nota: 'Consagração do pão e do vinho, com as duas elevações.',
-      conferir: true,
     },
     ...MISTERIO_DA_FE,
     {
       id: 'iv-anamnese',
       titulo: 'Anamnese e Oferenda',
       quem: 'presidente',
-      incipit: 'Celebrando, pois, ó Pai, a memória da nossa redenção…',
-      conferir: true,
+      incipit: 'Celebrando, agora, ó Pai, a memória da nossa redenção…',
     },
+    aclamacao('iv-aclamacao-oferta', 'Aceitai, ó Senhor, a nossa oferta!'),
     {
       id: 'iv-epiclese-comunhao',
       titulo: 'Epiclese da comunhão',
       quem: 'presidente',
-      incipit: 'Olhai, ó Pai, esta oferenda que destes à vossa Igreja…',
-      conferir: true,
+      incipit: 'Olhai, com bondade, a oblação que destes à vossa Igreja…',
     },
+    aclamacao('iv-aclamacao-corpo', 'O Espírito nos una num só corpo!'),
     {
-      id: 'iv-intercessoes',
-      titulo: 'Intercessões',
+      id: 'iv-intercessoes-igreja',
+      titulo: 'Intercessões pela Igreja',
       quem: 'presidente',
-      incipit: 'Lembrai-vos, ó Pai, de todos por quem oferecemos este sacrifício…',
-      nota: 'Entram o Papa, o bispo, o clero, os presentes, o povo todo e os falecidos.',
-      conferir: true,
+      incipit: 'E agora, ó Pai, lembrai-vos de todos pelos quais vos oferecemos este sacrifício…',
+      nota: 'Em Missa com Batismo, Crisma ou Primeira Comunhão, tem texto próprio.',
+    },
+    aclamacao('iv-aclamacao-igreja', 'Lembrai-vos, ó Pai, da vossa Igreja!'),
+    {
+      id: 'iv-intercessoes-defuntos',
+      titulo: 'Intercessões pelos falecidos',
+      quem: 'presidente',
+      incipit: 'Lembrai-vos também dos que morreram na paz do vosso Cristo…',
+    },
+    aclamacao('iv-aclamacao-defuntos', 'Concedei-lhes, ó Senhor, a luz eterna!'),
+    {
+      id: 'iv-intercessoes-todos',
+      titulo: 'Intercessão por todos nós',
+      quem: 'presidente',
+      incipit: 'E a todos nós, vossos filhos e filhas, concedei, ó Pai de bondade…',
     },
     ...DOXOLOGIA,
   ],
@@ -383,68 +396,106 @@ const OE_IV: OracaoEucaristica = {
 /**
  * Oração Eucarística V — própria do Brasil.
  *
- * ⚠️ Diferente das outras, esta tem **aclamações próprias da assembleia** ao
- * longo das intercessões, que variam conforme a edição. Não consegui conferir a
- * redação exata delas com um Missal impresso, então elas vão marcadas para
- * revisão em vez de entrar como se fossem certas. As respostas comuns (diálogo,
- * Santo, Mistério da Fé e Amém) são as mesmas de sempre e estão corretas.
+ * É a que mais depende desta tela: sete aclamações da assembleia, quase uma por
+ * parágrafo, e — o que o app errava — **Mistério da Fé próprio**. Não usa
+ * nenhuma das três fórmulas comuns: o celebrante diz "Tudo isto é mistério da
+ * fé!" e a resposta é outra. Quem chegasse aqui com as fórmulas comuns na tela
+ * responderia errado.
+ *
+ * O texto é em verso, com métrica: foi feito para ser cantado.
  */
 const OE_V: OracaoEucaristica = {
   id: 'oe-v',
   numero: 'V',
   nome: 'Oração Eucarística V',
-  quando: 'Própria do Brasil. Tem aclamações da assembleia ao longo das intercessões.',
-  avisoDeRevisao:
-    'As aclamações próprias desta oração ainda precisam ser conferidas com o Missal impresso da paróquia — estão marcadas abaixo. As respostas comuns (diálogo, Santo, Mistério da Fé e Amém) estão corretas.',
+  quando: 'Própria do Brasil, em verso. Sete aclamações da assembleia e Mistério da Fé próprio.',
   secoes: [
     ...DIALOGO,
     {
       id: 'v-prefacio',
-      titulo: 'Prefácio',
+      titulo: 'Prefácio próprio',
       quem: 'presidente',
-      incipit: 'Prefácio próprio da Oração Eucarística V.',
+      incipit: 'É justo e nos faz todos ser mais santos…',
     },
     SANTO,
     {
       id: 'v-pos-sanctus',
-      titulo: 'Pós-Sanctus',
+      titulo: 'Pós-Sanctus e Epiclese',
       quem: 'presidente',
-      incipit: 'Na verdade, vós sois santo e digno de louvor, ó Deus…',
-    },
-    {
-      id: 'v-epiclese',
-      titulo: 'Epiclese',
-      quem: 'presidente',
-      incipit: 'Sendo, pois, vós mesmos o autor da santidade…',
+      incipit: 'Ó Pai, vós que sempre quisestes ficar muito perto de nós…',
       nota: 'O sacerdote estende as mãos sobre as oferendas.',
     },
+    aclamacao('v-aclamacao-epiclese', 'Mandai vosso Espírito Santo!'),
     {
       id: 'v-instituicao',
       titulo: 'Narrativa da Instituição',
       quem: 'presidente',
-      incipit: 'Na noite em que ia ser entregue…',
+      incipit: 'Na noite em que ia ser entregue, ceando com seus Apóstolos…',
       nota: 'Consagração do pão e do vinho, com as duas elevações.',
     },
-    ...MISTERIO_DA_FE,
+    {
+      id: 'v-misterio-convite',
+      titulo: 'Mistério da Fé — próprio desta oração',
+      quem: 'presidente',
+      incipit: 'Tudo isto é mistério da fé!',
+      nota: 'Atenção: esta oração NÃO usa as três fórmulas comuns. O chamado é outro, e a resposta também.',
+    },
+    {
+      id: 'v-misterio-resposta',
+      titulo: 'Mistério da Fé — próprio desta oração',
+      quem: 'assembleia',
+      texto: `Toda vez que comemos deste Pão,
+toda vez que bebemos deste Vinho,
+recordamos a paixão de Jesus Cristo
+e ficamos esperando sua vinda.`,
+    },
     {
       id: 'v-anamnese',
       titulo: 'Anamnese e Oferenda',
       quem: 'presidente',
-      incipit: 'Celebrando, pois, ó Pai santo, a memória de Cristo…',
+      incipit: 'Recordando, ó Pai, neste momento, a paixão de Jesus, nosso Senhor…',
     },
+    aclamacao('v-aclamacao-oferta', 'Recebei, ó Senhor, a nossa oferta!'),
     {
-      id: 'v-intercessoes',
-      titulo: 'Intercessões com aclamação',
+      id: 'v-epiclese-comunhao',
+      titulo: 'Epiclese da comunhão',
       quem: 'presidente',
-      incipit: 'Lembrai-vos, ó Pai, da vossa Igreja…',
-      nota: 'Nesta oração as intercessões são entrecortadas por uma aclamação da assembleia.',
+      incipit: 'E quando recebermos Pão e Vinho, o Corpo e Sangue dele oferecidos…',
     },
+    aclamacao('v-aclamacao-corpo', 'O Espírito nos una num só corpo!'),
     {
-      id: 'v-aclamacao',
-      titulo: 'Aclamação própria da assembleia',
-      quem: 'assembleia',
-      conferir: true,
-      nota: 'Transcreva aqui a aclamação como está no Missal usado na paróquia. Ela se repete depois de cada bloco de intercessões.',
+      id: 'v-intercessoes-igreja',
+      titulo: 'Intercessão pela Igreja peregrina',
+      quem: 'presidente',
+      incipit: 'Protegei vossa Igreja que caminha nas estradas do mundo rumo ao céu…',
+    },
+    aclamacao('v-aclamacao-caminho', 'Caminhamos na estrada de Jesus!'),
+    {
+      id: 'v-intercessoes-pastores',
+      titulo: 'Intercessão pelo Papa e pelo Bispo',
+      quem: 'presidente',
+      incipit: 'Dai ao vosso servo, o Papa N., ser bem firme na fé, na caridade…',
+    },
+    aclamacao('v-aclamacao-igreja', 'Lembrai-vos, ó Pai, da vossa Igreja!'),
+    {
+      id: 'v-intercessoes-santos',
+      titulo: 'Intercessão pela vida eterna',
+      quem: 'presidente',
+      incipit: 'Esperamos entrar na vida eterna com Maria, Mãe de Deus e da Igreja…',
+    },
+    aclamacao('v-aclamacao-eterna', 'Esperamos entrar na vida eterna!'),
+    {
+      id: 'v-intercessoes-defuntos',
+      titulo: 'Intercessões pelos falecidos',
+      quem: 'presidente',
+      incipit: 'Abri as portas da misericórdia aos que chamastes para a outra vida…',
+    },
+    aclamacao('v-aclamacao-luz', 'A todos dai a luz que não se apaga!'),
+    {
+      id: 'v-intercessoes-todos',
+      titulo: 'Intercessão por todos nós',
+      quem: 'presidente',
+      incipit: 'E a todos nós, aqui reunidos, que somos povo santo e pecador…',
     },
     ...DOXOLOGIA,
   ],

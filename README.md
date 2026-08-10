@@ -91,7 +91,7 @@ Três decisões que explicam o resto:
 
 **A fonte ignora as solenidades.** Sondada de verdade (amostras em `docs/amostras/`), a API responde e o normalizador entende o formato. Mas em 15/08/2026 — Assunção — ela devolveu "Sábado da 19ª Semana do Tempo Comum", em verde, **com as leituras feriais**. O calendário local corrige a celebração e a cor, e a tela avisa para conferir no Lecionário, mas **as leituras próprias das solenidades continuam vindo erradas da fonte**. Enquanto não houver um lecionário local para esses dias, confira no Lecionário impresso em toda solenidade.
 
-**Incipits das falas do celebrante.** Na V, as aclamações próprias da assembleia ainda precisam ser transcritas do Missal impresso. Nas Orações I e IV, as primeiras palavras do celebrante foram escritas de memória e não foram cotejadas com Missal impresso — cada uma está marcada "conferir" na tela, com aviso no topo. As respostas da assembleia (diálogo, Santo, Mistério da Fé e Amém) estão corretas nas cinco.
+**Orações Eucarísticas: conferidas.** As cinco foram cotejadas com o texto da 3ª edição típica (2023) trazido pelo diácono da paróquia, uma oração por arquivo. Nada mais é de memória. A conferência corrigiu bastante coisa: incipits da edição anterior ("é justo e necessário" por "é digno e justo", "a memória" por "o memorial"), as **aclamações próprias da assembleia**, que faltavam nas cinco — de cinco a sete por oração —, e o **Mistério da Fé da OE V**, que é próprio dela e estava com as três fórmulas comuns.
 
 **Texto do Missal.** O app traz as respostas da assembleia na íntegra e, das falas do celebrante, só as primeiras palavras, como deixa. **O texto do Missal não vem no app** — nenhuma fala do celebrante tem o texto integral guardado.
 
