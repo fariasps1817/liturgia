@@ -10,6 +10,7 @@
     "lint": "eslint",
     "verificar": "tsx scripts/verificar-calendario.ts && tsx scripts/verificar-normalizador.ts && tsx scripts/verificar-preces.ts && tsx scripts/verificar-oracoes.ts && tsx scripts/verificar-pix.ts",
     "sondar": "tsx scripts/sondar-liturgia.ts",
+    "missal": "tsx scripts/missal.ts",
     "icones": "tsx scripts/gerar-icones.ts"
   },
   "dependencies": {

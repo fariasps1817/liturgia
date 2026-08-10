@@ -4,6 +4,10 @@ import { AcompanharOracao } from '@/componentes/AcompanharOracao';
 import { IconeSeta } from '@/componentes/icones';
 import { acharOracao, ORACOES_EUCARISTICAS } from '@/dados/oracoes-eucaristicas';
 import {
+  carregarTextosDoMissal,
+  comTextosDoMissal,
+} from '@/dados/oracoes-eucaristicas/missal-local';
+import {
   aplicarTextoPresidencial,
   mostrarTextoPresidencial,
 } from '@/dados/oracoes-eucaristicas/presidencial';
@@ -24,10 +28,14 @@ export default async function PaginaDaOracao({ params }: PageProps<'/oracoes-euc
   if (!encontrada) notFound();
 
   /*
-   * O corte acontece aqui, no servidor: sem a autorização da CNBB, o texto
-   * integral das falas do celebrante não chega sequer ao navegador.
+   * Primeiro encaixa o que houver em missal.local.txt, depois aplica a chave.
+   * Nesta ordem: com a chave desligada, o texto do Missal é removido junto com
+   * o resto e não chega sequer ao navegador.
    */
-  const oracao = aplicarTextoPresidencial(encontrada, mostrarTextoPresidencial());
+  const oracao = aplicarTextoPresidencial(
+    comTextosDoMissal(encontrada, carregarTextosDoMissal()),
+    mostrarTextoPresidencial(),
+  );
 
   return (
     <>

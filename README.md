@@ -38,6 +38,7 @@ Sem `OPENAI_API_KEY` tudo funciona, menos gerar preces — que avisa em vez de q
 | `npm run dev` | Desenvolvimento |
 | `npm run build` | Build de produção |
 | `npm run verificar` | Confere o calendário litúrgico, o normalizador da API e o gerador de PIX |
+| `npm run missal` | Cria e confere `missal.local.txt`, com os textos do celebrante |
 | `npm run sondar` | Mostra o que a API de liturgia devolve de verdade e salva amostras |
 | `npm run icones` | Regera os PNGs do PWA a partir de `public/icone.svg` |
 | `npm run lint` | ESLint |
@@ -90,16 +91,21 @@ Três decisões que explicam o resto:
 
 **A fonte ignora as solenidades.** Sondada de verdade (amostras em `docs/amostras/`), a API responde e o normalizador entende o formato. Mas em 15/08/2026 — Assunção — ela devolveu "Sábado da 19ª Semana do Tempo Comum", em verde, **com as leituras feriais**. O calendário local corrige a celebração e a cor, e a tela avisa para conferir no Lecionário, mas **as leituras próprias das solenidades continuam vindo erradas da fonte**. Enquanto não houver um lecionário local para esses dias, confira no Lecionário impresso em toda solenidade.
 
-**Oração Eucarística V.** As aclamações próprias dela ainda precisam ser transcritas do Missal impresso da paróquia — estão marcadas na tela. As respostas comuns (diálogo, Santo, Mistério da Fé e Amém) estão corretas nas três orações.
+**Incipits das falas do celebrante.** Na V, as aclamações próprias da assembleia ainda precisam ser transcritas do Missal impresso. Nas Orações I e IV, as primeiras palavras do celebrante foram escritas de memória e não foram cotejadas com Missal impresso — cada uma está marcada "conferir" na tela, com aviso no topo. As respostas da assembleia (diálogo, Santo, Mistério da Fé e Amém) estão corretas nas cinco.
 
 **Texto do Missal.** O app traz as respostas da assembleia na íntegra e, das falas do celebrante, só as primeiras palavras, como deixa. **O texto do Missal não vem no app** — nenhuma fala do celebrante tem o texto integral guardado.
 
-Para tê-lo, são dois passos, nesta ordem:
+Para tê-lo:
 
-1. Preencher `texto` nas seções do celebrante em `src/dados/oracoes-eucaristicas/index.ts`, copiando do Missal da paróquia.
-2. Pôr `MOSTRAR_TEXTO_PRESIDENCIAL=true` no `.env.local` e reiniciar.
+```bash
+npm run missal        # cria missal.local.txt com as 43 seções, na ordem
+```
 
-Sem o passo 2 o texto é removido no servidor e não chega ao navegador — nem no código-fonte da página. Os direitos do Missal em português são da CNBB: para uso interno da equipe tudo bem; para publicar na internet é preciso autorização escrita.
+Abra o arquivo e escreva o texto abaixo de cada `#`, a partir do Missal impresso. Depois ponha `MOSTRAR_TEXTO_PRESIDENCIAL=true` no `.env.local` e reinicie. Rodar `npm run missal` de novo mostra o que falta e acusa id digitado errado.
+
+O arquivo fica **fora do repositório** — o `.gitignore` o barra. É de propósito: os direitos da tradução são da CNBB, e num arquivo de código o texto iria para o GitHub junto com o resto. Assim ele fica na máquina de quem preencheu e no servidor da paróquia, que é uso interno da equipe; publicar na internet é que exigiria autorização escrita.
+
+Com a chave desligada, o texto é removido **no servidor**: não chega ao navegador nem no código-fonte da página.
 
 **Chave PIX.** O código gerado passa nas verificações, mas **cole o "Copia e Cola" num app de banco de verdade antes de publicar**. Erro de CRC16 é o defeito mais comum nessa implementação e só aparece aí.
 

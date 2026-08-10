@@ -21,6 +21,11 @@ import {
   type Secao,
 } from '../src/dados/oracoes-eucaristicas';
 import {
+  carregarTextosDoMissal,
+  comTextosDoMissal,
+  interpretarMissal,
+} from '../src/dados/oracoes-eucaristicas/missal-local';
+import {
   aplicarTextoPresidencial,
   mostrarTextoPresidencial,
 } from '../src/dados/oracoes-eucaristicas/presidencial';
@@ -155,6 +160,45 @@ console.log('\n— A chave do texto presidencial —');
     else process.env.MOSTRAR_TEXTO_PRESIDENCIAL = valor;
     conferir(`chave = ${JSON.stringify(valor)}`, mostrarTextoPresidencial(), valor === 'true');
   }
+}
+
+console.log('\n— O arquivo missal.local.txt —');
+{
+  const bruto = [
+    '// comentário some',
+    '# ii-pos-sanctus',
+    'Primeiro parágrafo.',
+    '',
+    'Segundo parágrafo.',
+    '',
+    '// outro comentário',
+    '# ii-epiclese',
+    'Texto da epiclese.',
+    '# ii-vazia',
+    '',
+  ].join('\n');
+
+  const textos = interpretarMissal(bruto);
+  conferir('separa as seções', Object.keys(textos).length, 2);
+  conferir('preserva o parágrafo em branco', textos['ii-pos-sanctus'], 'Primeiro parágrafo.\n\nSegundo parágrafo.');
+  conferir('comentário não entra no texto', /coment[áa]rio/.test(JSON.stringify(textos)), false);
+  conferir('seção sem texto é ignorada', 'ii-vazia' in textos, false);
+  conferir('sem arquivo não quebra', Object.keys(carregarTextosDoMissal('/pasta/que/nao/existe')).length, 0);
+
+  // O encaixe nunca sobrescreve o que já está conferido no código.
+  const oracao = ORACOES_EUCARISTICAS.find((o) => o.id === 'oe-ii')!;
+  const comTexto = comTextosDoMissal(oracao, {
+    'ii-pos-sanctus': 'VEIO DO ARQUIVO',
+    santo: 'TENTATIVA DE SOBRESCREVER O SANTO',
+  });
+  const posSanctus = comTexto.secoes.find((s) => s.id === 'ii-pos-sanctus');
+  const santo = comTexto.secoes.find((s) => s.id === 'santo');
+  conferir('preenche fala do celebrante que estava vazia', posSanctus?.texto, 'VEIO DO ARQUIVO');
+  conferir('não sobrescreve resposta da assembleia', santo?.texto?.startsWith('Santo, Santo, Santo'), true);
+
+  // E o que veio do arquivo continua sujeito à chave.
+  const barrado = aplicarTextoPresidencial(comTexto, false);
+  conferir('chave desligada barra o texto do arquivo', /VEIO DO ARQUIVO/.test(JSON.stringify(barrado)), false);
 }
 
 console.log('\n— Quem tem seção a conferir avisa no topo —');
