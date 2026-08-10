@@ -23,6 +23,12 @@ export type Intencao = {
 export type ConteudoDasPreces = {
   /** A aclamação que a assembleia repete depois de cada intenção. */
   resposta: string;
+  /**
+   * O chamado com que as quatro intenções terminam — "rezemos ao Senhor" e
+   * semelhantes. É a deixa que avisa a assembleia de que chegou a hora de
+   * responder; sem ele, ninguém sabe quando entrar.
+   */
+  chamado: string;
   intencoes: Intencao[];
 };
 

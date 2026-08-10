@@ -112,7 +112,8 @@ export async function precesExistem(
 }
 
 export async function salvarPreces(preces: Preces): Promise<void> {
-  const { data, comunidade, resposta, intencoes, intencaoLocal, modelo, criadoEm } = preces;
+  const { data, comunidade, resposta, chamado, intencoes, intencaoLocal, modelo, criadoEm } =
+    preces;
 
   const c = await cliente();
   // `REPLACE` porque "Refazer preces" sobrescreve: a equipe quer uma versão
@@ -127,7 +128,7 @@ export async function salvarPreces(preces: Preces): Promise<void> {
       comunidade,
       resposta,
       intencaoLocal ?? null,
-      JSON.stringify({ resposta, intencoes }),
+      JSON.stringify({ resposta, chamado, intencoes }),
       modelo,
       criadoEm,
     ],

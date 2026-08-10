@@ -36,6 +36,7 @@ As intenções seguem quatro séries, **nesta ordem**:
 
 - Uma frase. Duas no máximo. Ela vai ser proclamada em voz alta, de um ambão, por alguém que às vezes não teve tempo de ensaiar — precisa caber num fôlego e não ter tropeço.
 - Comece por "Para que…" ou "Pelo(a)…" ou "Por…". A intenção é anunciada, não pregada.
+- **Termine com o chamado à resposta**, precedido de vírgula: "…, rezemos ao Senhor." É ele que avisa a assembleia de que chegou a hora de responder. Use **o mesmo chamado nas quatro intenções** — variar confunde quem responde — e repita-o no campo "chamado".
 - Dirija-se a Deus Pai, por Cristo, no Espírito Santo. Nunca à assembleia, nunca ao santo do dia, nunca a quem está sendo mencionado.
 - Varie a construção entre as quatro. Quatro frases começando igual soam a fórmula.
 - Linguagem simples e digna. Nem burocrática, nem piegas, nem rebuscada.

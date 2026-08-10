@@ -76,6 +76,7 @@ async function umaTentativa(
 
   return {
     resposta: saida.resposta.trim() || resposta,
+    chamado: saida.chamado.trim().replace(/[.,;:!?\s]+$/, ''),
     intencoes: saida.intencoes.map((i) => ({
       serie: i.serie as SerieDeIntencao,
       texto: i.texto.trim(),
@@ -89,12 +90,42 @@ function seriesEstaoCorretas(preces: ConteudoDasPreces): boolean {
   return preces.intencoes.every((intencao, i) => intencao.serie === ORDEM_DAS_SERIES[i]);
 }
 
+/** Compara ignorando acento, caixa e pontuação — o que importa são as palavras. */
+function achatar(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+/**
+ * Verdadeiro quando as quatro intenções terminam no mesmo chamado à resposta.
+ *
+ * É a deixa que avisa a assembleia de que chegou a hora de responder. Faltando
+ * numa delas, o leitor termina a intenção e o povo não entra — o silêncio no
+ * meio da oração universal é constrangedor e ninguém sabe de quem é a vez.
+ * Variando entre elas, é pior: a assembleia aprende uma deixa e leva outra.
+ */
+function chamadoEstaEmTodas(preces: ConteudoDasPreces): boolean {
+  const chamado = achatar(preces.chamado);
+  if (!chamado) return false;
+  return preces.intencoes.every((intencao) => achatar(intencao.texto).endsWith(chamado));
+}
+
+/** As duas exigências que a saída estruturada não consegue garantir sozinha. */
+function estaCompleta(preces: ConteudoDasPreces): boolean {
+  return seriesEstaoCorretas(preces) && chamadoEstaEmTodas(preces);
+}
+
 /**
  * Gera as preces do dia.
  *
  * Faz no máximo duas tentativas: a saída estruturada garante o formato, mas não
  * garante que as quatro séries vieram completas e na ordem — e a ordem é a
- * própria norma, não um detalhe de apresentação.
+ * própria norma, não um detalhe de apresentação — nem que todas terminem no
+ * mesmo chamado à resposta, que é a deixa da assembleia.
  */
 export async function gerarPreces(
   liturgia: LiturgiaDoDia,
@@ -104,18 +135,24 @@ export async function gerarPreces(
   const intencaoLocal = opcoes.intencaoLocal?.trim() || undefined;
 
   const primeira = await umaTentativa(liturgia, resposta, intencaoLocal);
-  if (seriesEstaoCorretas(primeira)) return primeira;
+  if (estaCompleta(primeira)) return primeira;
 
   const segunda = await umaTentativa(
     liturgia,
     resposta,
     intencaoLocal,
-    `Atenção: devolva exatamente quatro intenções, uma para cada série, na ordem ${ORDEM_DAS_SERIES.join(' → ')}. Nem mais, nem menos, sem repetir série.`,
+    `Atenção: devolva exatamente quatro intenções, uma para cada série, na ordem ${ORDEM_DAS_SERIES.join(' → ')}. Nem mais, nem menos, sem repetir série. E termine as quatro com o mesmo chamado à resposta, precedido de vírgula — o mesmo texto que você puser no campo "chamado".`,
   );
 
   if (!seriesEstaoCorretas(segunda)) {
     throw new ErroAoGerarPreces(
       'As preces não saíram nas quatro séries previstas pelo Missal. Tente gerar de novo.',
+    );
+  }
+
+  if (!chamadoEstaEmTodas(segunda)) {
+    throw new ErroAoGerarPreces(
+      'As intenções não terminaram todas no mesmo chamado à resposta. Tente gerar de novo.',
     );
   }
 

@@ -72,7 +72,7 @@ console.log('\n— O esquema que a OpenAI aceita no modo estrito —');
 
   // O estrito exige que todo campo seja obrigatório e que objetos fechem.
   conferir('objetos fechados', schema.includes('"additionalProperties":false'), true);
-  for (const campo of ['resposta', 'intencoes', 'serie', 'texto']) {
+  for (const campo of ['resposta', 'chamado', 'intencoes', 'serie', 'texto']) {
     conferir(`campo "${campo}" presente`, schema.includes(`"${campo}"`), true);
   }
 

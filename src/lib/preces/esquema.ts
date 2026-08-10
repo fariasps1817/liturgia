@@ -16,6 +16,12 @@ export const EsquemaDasPreces = z.object({
   resposta: z
     .string()
     .describe('A aclamação que a assembleia repete depois de cada intenção.'),
+  chamado: z
+    .string()
+    .describe(
+      'O chamado à resposta com que TODAS as quatro intenções terminam, sem ponto final — ' +
+        'por exemplo "rezemos", "rezemos ao Senhor", "nós vos pedimos". O mesmo nas quatro.',
+    ),
   intencoes: z
     .array(
       z.object({
