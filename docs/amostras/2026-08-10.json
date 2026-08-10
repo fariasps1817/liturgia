@@ -1,0 +1,40 @@
+{
+  "data": "10/08/2026",
+  "liturgia": "São Lourenço, diácono e mártir, Festa",
+  "cor": "Vermelho",
+  "oracoes": {
+    "coleta": "Ó Deus, o diácono São Lourenço, inflamado de amor por vós, brilhou pela fidelidade no vosso serviço e pela glória do martírio; concedei-nos amar o que ele amou e praticar o que ele ensinou. Por nosso Senhor Jesus Cristo, vosso Filho, que é Deus, e convosco vive e reina, na unidade do Espírito Santo, por todos os séculos dos séculos.",
+    "oferendas": "Senhor, acolhei com bondade as oferendas que vos apresentamos com alegria na festa de São Lourenço, e concedei que elas contribuam para a nossa salvação. Por Cristo, nosso Senhor.",
+    "comunhao": "Senhor, alimentados com vossos dons sagrados, nós vos pedimos humildemente que, ao prestar-vos o devido culto na festa de São Lourenço, sintamos crescer em nós os frutos da vossa salvação. Por Cristo, nosso Senhor.",
+    "extras": []
+  },
+  "leituras": {
+    "primeiraLeitura": [
+      {
+        "referencia": "2Cor 9, 6-10",
+        "titulo": "Leitura da Segunda Carta de São Paulo aos Coríntios",
+        "texto": "Irmãos, 6“Quem semeia pouco colherá também pouco e quem semeia com largueza colherá também com largueza”. 7Dê cada um conforme tiver decidido em seu coração, sem pesar nem constrangimento; pois Deus “ama quem dá com alegria”. 8Deus é poderoso para vos cumular de toda sorte de graças, para que, em tudo, tenhais sempre o necessário e ainda tenhais de sobra para toda obra boa, 9como está escrito: “Distribuiu generosamente, deu aos pobres; a sua justiça permanece para sempre”. 10Aquele que dá a semente ao semeador e lhe dará o pão como alimento, ele mesmo multiplicará as vossas sementes e aumentará os frutos da vossa justiça."
+      }
+    ],
+    "salmo": [
+      {
+        "referencia": "Sl 111",
+        "refrao": "Feliz o homem caridoso e prestativo.",
+        "texto": "— Feliz o homem que respeita o Senhor e que ama com carinho a sua lei! Sua descendência será forte sobre a terra, abençoada a geração dos homens retos!\n— Feliz o homem caridoso e prestativo, que resolve seus negócios com justiça. Porque jamais vacilará o homem reto, sua lembrança permanece eternamente!\n— Ele não teme receber notícias más: confiando em Deus, seu coração está seguro. Seu coração está tranquilo e nada teme, e confusos há de ver seus inimigos.\n— Ele reparte com os pobres os seus bens, permanece para sempre o bem que fez, e crescerão a sua glória e seu poder"
+      }
+    ],
+    "segundaLeitura": [],
+    "evangelho": [
+      {
+        "referencia": "Jo 12, 24-26",
+        "titulo": "Proclamação do Evangelho de Jesus Cristo ✠ segundo João",
+        "texto": "Naquele tempo, disse Jesus a seus discípulos: 24“Em verdade, em verdade vos digo: Se o grão de trigo que cai na terra não morre, ele continua só um grão de trigo; mas se morre, então produz muito fruto.25Quem se apega à sua vida, perde-a; mas quem faz pouca conta de sua vida neste mundo conservá-la-á para a vida eterna. 26Se alguém me quer servir, siga-me, e onde eu estou estará também o meu servo. Se alguém me serve, meu Pai o honrará”."
+      }
+    ],
+    "extras": []
+  },
+  "antifonas": {
+    "entrada": "Este é São Lourenço que se entregou pelos pobres; por isso, mereceu sofrer o martírio e subir com alegria para junto do Senhor Jesus Cristo.",
+    "comunhao": "Aquele que me serve, siga-me; e onde eu estiver, estará também o meu servidor, diz o Senhor. (Cf. Jo 12, 26)"
+  }
+}

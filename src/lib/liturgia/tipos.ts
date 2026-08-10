@@ -39,6 +39,12 @@ export type LiturgiaDoDia = {
   leituras: Leitura[];
   /** Verdadeiro quando os textos não puderam ser obtidos e só há o calendário. */
   semTextos: boolean;
+  /**
+   * Verdadeiro quando o dia é solenidade no cálculo local mas a fonte devolveu
+   * outra celebração — sinal de que as leituras que vieram são as do tempo
+   * corrente, e não as próprias do dia. A tela avisa para conferir no Lecionário.
+   */
+  leiturasSuspeitas?: boolean;
   fonte?: { nome: string; url: string };
 };
 

@@ -120,6 +120,47 @@ console.log('\n— Degradação quando a fonte falha —');
   conferir('e a data por extenso', l.dataExtenso, 'Domingo, 16 de agosto de 2026');
 }
 
+console.log('\n— Solenidade: o calendário local manda na celebração E na cor —');
+{
+  // Caso real: em 15/08/2026 a fonte devolve "Sábado da 19ª Semana do Tempo
+  // Comum" / Verde e ignora a Assunção. Se a cor viesse da fonte, a tela diria
+  // "Assunção de Nossa Senhora" em verde e a equipe prepararia a alfaia errada.
+  const raiz = {
+    liturgia: 'Sábado da 19ª Semana do Tempo Comum',
+    cor: 'Verde',
+    leituras: { evangelho: [{ referencia: 'Lucas 1,39', texto: 'Corpo.' }] },
+  };
+  const l = normalizar('2026-08-15', raiz);
+  conferir('celebração vem do cálculo local', l.celebracao, 'Assunção de Nossa Senhora');
+  conferir('e a cor acompanha, não fica verde', l.cor, 'branco');
+  conferir('e as leituras ficam marcadas como suspeitas', l.leiturasSuspeitas, true);
+}
+
+console.log('\n— Leituras suspeitas: só quando a fonte realmente errou o dia —');
+{
+  const comLeituras = { leituras: { evangelho: [{ referencia: 'Lucas 1,39', texto: 'Corpo.' }] } };
+
+  // A fonte nomeia a solenidade → as leituras são as próprias, não avisa.
+  const acertou = normalizar('2026-08-15', { ...comLeituras, liturgia: 'Assunção de Nossa Senhora' });
+  conferir('fonte nomeia a solenidade', acertou.leiturasSuspeitas, false);
+
+  // Nome diferente, mesma celebração ("Natal" ≠ "Natividade", mas "Senhor" une).
+  const outroNome = normalizar('2026-12-25', { ...comLeituras, liturgia: 'Natividade do Senhor' });
+  conferir('nome diferente da mesma solenidade', outroNome.leiturasSuspeitas, false);
+
+  // A fonte só rotula como "Solenidade" — sabe do dia, não avisa.
+  const soRotulo = normalizar('2026-06-04', { ...comLeituras, liturgia: 'Solenidade de Corpus Christi' });
+  conferir('fonte diz "Solenidade"', soRotulo.leiturasSuspeitas, false);
+
+  // Dia comum: nunca avisa, mesmo com nomes distintos.
+  const feria = normalizar('2026-08-10', { ...comLeituras, liturgia: 'São Lourenço, diácono e mártir' });
+  conferir('dia que não é solenidade', feria.leiturasSuspeitas, false);
+
+  // Sem leituras nenhuma não há o que suspeitar — o aviso de erro já cobre.
+  const vazio = normalizar('2026-08-15', { liturgia: 'Sábado da 19ª Semana do Tempo Comum' });
+  conferir('sem leituras não marca', vazio.leiturasSuspeitas, false);
+}
+
 console.log('\n— Lixo na entrada não derruba —');
 for (const lixo of [undefined, 0, '', 'texto solto', [], [1, 2, 3], { leituras: 'nada' }, { leituras: { evangelho: 42 } }]) {
   total++;

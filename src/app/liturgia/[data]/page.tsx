@@ -64,6 +64,16 @@ export default async function PaginaDoDia({ params }: PageProps<'/liturgia/[data
         </Aviso>
       ) : null}
 
+      {liturgia.leiturasSuspeitas ? (
+        <Aviso icone={<IconeAviso className="h-5 w-5" />}>
+          <p className="font-semibold text-tinta">Confira estas leituras no Lecionário.</p>
+          <p className="mt-1">
+            Hoje é solenidade, mas a fonte devolveu as leituras do tempo corrente. A celebração e a
+            cor acima estão certas — as leituras abaixo provavelmente não são as próprias do dia.
+          </p>
+        </Aviso>
+      ) : null}
+
       <div className="space-y-2">
         {liturgia.leituras.map((leitura) => (
           <BotaoDeLinha

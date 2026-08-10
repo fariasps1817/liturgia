@@ -87,7 +87,7 @@ Três decisões que explicam o resto:
 
 ## Pendências conhecidas
 
-**A fonte de leituras não pôde ser sondada.** O ambiente onde o app foi desenvolvido bloqueia o domínio da API, então o normalizador foi escrito para aceitar as variações conhecidas de formato, mas não foi conferido contra uma resposta real. **Rode `npm run sondar` numa máquina com internet antes de confiar nas leituras** — ele mostra o que a API devolve e diz se o app entendeu.
+**A fonte ignora as solenidades.** Sondada de verdade (amostras em `docs/amostras/`), a API responde e o normalizador entende o formato. Mas em 15/08/2026 — Assunção — ela devolveu "Sábado da 19ª Semana do Tempo Comum", em verde, **com as leituras feriais**. O calendário local corrige a celebração e a cor, e a tela avisa para conferir no Lecionário, mas **as leituras próprias das solenidades continuam vindo erradas da fonte**. Enquanto não houver um lecionário local para esses dias, confira no Lecionário impresso em toda solenidade.
 
 **Oração Eucarística V.** As aclamações próprias dela ainda precisam ser transcritas do Missal impresso da paróquia — estão marcadas na tela. As respostas comuns (diálogo, Santo, Mistério da Fé e Amém) estão corretas nas três orações.
 

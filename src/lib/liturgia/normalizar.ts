@@ -256,6 +256,38 @@ const CORES: Record<string, LiturgiaDoDia['cor']> = {
   preto: 'roxo',
 };
 
+/** Palavras de peso do nome de uma celebração, sem acento e sem as de ligação. */
+function palavrasFortes(s: string): Set<string> {
+  return new Set(
+    s
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((p) => p.length >= 4),
+  );
+}
+
+/**
+ * A fonte às vezes não conhece a solenidade e devolve o dia do tempo corrente
+ * — e com ele as leituras feriais. Aconteceu de verdade na Assunção de 2026:
+ * veio "Sábado da 19ª Semana do Tempo Comum" com Ez 18 e Mt 19.
+ *
+ * O estrago é silencioso: a tela mostra a celebração certa (calculada aqui)
+ * junto das leituras erradas (vindas de lá), e a equipe só descobre na missa.
+ * Detecta pela ausência de qualquer palavra em comum entre os dois nomes.
+ */
+function fonteIgnorouASolenidade(nomeLocal: string, nomeDaFonte: string | undefined): boolean {
+  if (!nomeDaFonte) return false;
+  const daFonte = palavrasFortes(nomeDaFonte);
+  // Se a fonte diz "Solenidade de...", ela sabe do dia; o nome é que difere.
+  if (daFonte.has('solenidade')) return false;
+  for (const palavra of palavrasFortes(nomeLocal)) {
+    if (daFonte.has(palavra)) return false;
+  }
+  return true;
+}
+
 /**
  * Constrói a liturgia do dia a partir da resposta da fonte, completando com o
  * calendário calculado localmente o que a fonte não trouxer.
@@ -282,16 +314,23 @@ export function normalizar(data: string, bruto: unknown): LiturgiaDoDia {
   const corDaFonte = corBruta ? CORES[normalizarChave(corBruta)] : undefined;
   const celebracaoDaFonte = texto(bruto, 'liturgia', 'celebracao', 'celebration', 'titulo', 'nome');
 
+  // A fonte tem o santo do dia e as memórias, que o cálculo local não cobre.
+  // O cálculo local tem precedência nas solenidades, onde ele é confiável e
+  // a fonte às vezes traz só o nome do tempo.
+  const localMandaNoDia = local.grau === 'solenidade';
+
   return {
     ...base,
-    // A fonte tem o santo do dia e as memórias, que o cálculo local não cobre.
-    // O cálculo local tem precedência nas solenidades, onde ele é confiável e
-    // a fonte às vezes traz só o nome do tempo.
-    celebracao:
-      local.grau === 'solenidade' ? local.celebracao : (celebracaoDaFonte ?? local.celebracao),
-    cor: corDaFonte ?? local.cor,
+    celebracao: localMandaNoDia ? local.celebracao : (celebracaoDaFonte ?? local.celebracao),
+    // A cor acompanha quem venceu a celebração. Misturar as duas põe na tela
+    // "Assunção de Nossa Senhora" em verde — e a equipe prepara a alfaia errada.
+    cor: localMandaNoDia ? local.cor : (corDaFonte ?? local.cor),
     leituras,
     semTextos: leituras.length === 0,
+    leiturasSuspeitas:
+      localMandaNoDia &&
+      leituras.length > 0 &&
+      fonteIgnorouASolenidade(local.celebracao, celebracaoDaFonte),
   };
 }
 
