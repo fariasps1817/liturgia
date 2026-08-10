@@ -1,28 +1,29 @@
 /** As quatro séries de intenções fixadas pela IGMR 70, nesta ordem. */
 export type SerieDeIntencao = 'igreja' | 'mundo' | 'sofredores' | 'comunidade';
 
-export const ROTULO_DA_SERIE: Record<SerieDeIntencao, string> = {
-  igreja: 'Pelas necessidades da Igreja',
-  mundo: 'Pelos governantes e pela salvação do mundo',
-  sofredores: 'Pelos que sofrem sob qualquer dificuldade',
-  comunidade: 'Pela comunidade local',
-};
-
 export const ORDEM_DAS_SERIES: SerieDeIntencao[] = ['igreja', 'mundo', 'sofredores', 'comunidade'];
 
 export type Intencao = {
+  /**
+   * A série da IGMR 70 a que a intenção pertence.
+   *
+   * Não aparece na tela — a equipe lê as intenções corridas, numeradas. Continua
+   * aqui porque é o que garante que vieram as quatro, uma de cada, na ordem:
+   * é sobre este campo que `seriesEstaoCorretas` decide se aceita a geração.
+   */
   serie: SerieDeIntencao;
   texto: string;
 };
 
+/**
+ * O app cobre só o que o leitor proclama: a aclamação da assembleia e as quatro
+ * intenções. A monição de abertura e a oração conclusiva são falas do sacerdote,
+ * que ele lê do Missal — gerá-las seria escrever para ninguém.
+ */
 export type ConteudoDasPreces = {
   /** A aclamação que a assembleia repete depois de cada intenção. */
   resposta: string;
-  /** Monição do sacerdote que abre a oração universal. */
-  introducao: string;
   intencoes: Intencao[];
-  /** Oração conclusiva do sacerdote. */
-  conclusao: string;
 };
 
 export type Preces = ConteudoDasPreces & {

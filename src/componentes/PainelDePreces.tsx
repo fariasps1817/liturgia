@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { compartilhar, copiarTexto } from '@/lib/compartilhar';
-import { RESPOSTA_PADRAO, ROTULO_DA_SERIE, type Preces } from '@/lib/preces/tipos';
+import { RESPOSTA_PADRAO, type Preces } from '@/lib/preces/tipos';
 import { IconeAviso, IconeCheck, IconeCopiar, IconeFaisca, IconeWhatsApp } from './icones';
 import { Aviso, Cartao } from './ui';
 
@@ -200,43 +200,26 @@ export function PainelDePreces({ data, dataExtenso }: { data: string; dataExtens
 
       {estado === 'pronto' && preces ? (
         <>
+          {/*
+            Só o que o leitor proclama: a aclamação uma vez, e as quatro
+            intenções corridas. A série de cada uma continua governando o que é
+            gerado, mas não vai para a tela — quem está no ambão lê a intenção,
+            não a classificação dela.
+          */}
           <article className="corpo-leitura space-y-5">
-            <section>
-              <p>{preces.introducao}</p>
-            </section>
+            <p className="rounded-2xl border border-borda bg-superficie-2 px-4 py-3 font-semibold text-tinta not-italic">
+              <span className="mr-1.5 text-realce">R.</span>
+              {preces.resposta}
+            </p>
 
-            {/*
-              A resposta aparece só aqui, uma vez. Repetida embaixo de cada
-              intenção ela dobrava o tamanho da tela e empurrava as intenções
-              para fora do alcance do polegar — e a assembleia responde sempre
-              a mesma coisa, que quem proclama já sabe de cor depois da primeira.
-            */}
-            <section>
-              <p className="rounded-2xl border border-borda bg-superficie-2 px-4 py-3 font-semibold text-tinta not-italic">
-                <span className="mr-1.5 text-realce">R.</span>
-                {preces.resposta}
-              </p>
-            </section>
-
-            <section>
-              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-tinta-fraca not-italic">
-                Intenções
-              </h2>
-              <ol className="space-y-4">
-                {preces.intencoes.map((intencao, i) => (
-                  <li key={i}>
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-realce not-italic">
-                      {i + 1}. {ROTULO_DA_SERIE[intencao.serie] ?? intencao.serie}
-                    </p>
-                    <p>{intencao.texto}</p>
-                  </li>
-                ))}
-              </ol>
-            </section>
-
-            <section>
-              <p>{preces.conclusao}</p>
-            </section>
+            <ol className="space-y-4">
+              {preces.intencoes.map((intencao, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="font-semibold text-realce not-italic">{i + 1}.</span>
+                  <p>{intencao.texto}</p>
+                </li>
+              ))}
+            </ol>
           </article>
 
           <p className="mt-6 text-xs text-tinta-fraca">
@@ -294,25 +277,14 @@ export function PainelDePreces({ data, dataExtenso }: { data: string; dataExtens
 /**
  * Texto das preces para a área de transferência e o WhatsApp.
  *
- * Acompanha a tela: a resposta vem uma vez, antes das intenções. Repetida a
- * cada uma, a mensagem no grupo da equipe ficava com o dobro do tamanho e
- * quase toda ela era a mesma linha.
+ * Acompanha a tela: a resposta uma vez, antes das intenções, e nada além delas.
  */
 function formatarPreces(preces: Preces, dataExtenso: string): string {
-  const linhas = [
-    '*PRECES DA ASSEMBLEIA*',
-    dataExtenso,
-    '',
-    preces.introducao,
-    '',
-    `_R. ${preces.resposta}_`,
-    '',
-  ];
+  const linhas = ['*PRECES DA ASSEMBLEIA*', dataExtenso, '', `_R. ${preces.resposta}_`, ''];
 
   preces.intencoes.forEach((intencao, i) => {
     linhas.push(`${i + 1}. ${intencao.texto}`, '');
   });
 
-  linhas.push(preces.conclusao);
-  return linhas.join('\n');
+  return linhas.join('\n').trimEnd();
 }

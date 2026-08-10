@@ -16,9 +16,6 @@ export const EsquemaDasPreces = z.object({
   resposta: z
     .string()
     .describe('A aclamação que a assembleia repete depois de cada intenção.'),
-  introducao: z
-    .string()
-    .describe('Monição breve do sacerdote, dirigida à assembleia, que abre a oração universal.'),
   intencoes: z
     .array(
       z.object({
@@ -33,11 +30,6 @@ export const EsquemaDasPreces = z.object({
     .describe(
       'Exatamente quatro intenções: uma para cada série da IGMR 70, na ordem ' +
         `${ORDEM_DAS_SERIES.join(', ')}. Nem mais, nem menos, sem repetir série.`,
-    ),
-  conclusao: z
-    .string()
-    .describe(
-      'Oração conclusiva do sacerdote, dirigida a Deus, terminando com a fórmula habitual.',
     ),
 });
 

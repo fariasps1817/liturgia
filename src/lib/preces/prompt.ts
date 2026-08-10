@@ -7,12 +7,13 @@ import { ORDEM_DAS_SERIES, RESPOSTA_PADRAO } from './tipos';
  * A estrutura não é invenção nossa: é a Oração Universal como a Instrução Geral
  * do Missal Romano a define (IGMR 69-71). O sacerdote introduz e conclui, o
  * leitor propõe as intenções, o povo responde com uma aclamação comum, e as
- * intenções seguem quatro séries em ordem fixa.
+ * intenções seguem quatro séries em ordem fixa. O app escreve só a parte do
+ * leitor: as falas do sacerdote ele lê do Missal.
  *
- * Este texto é longo de propósito. Passa dos 512 tokens que o Opus 5 exige para
- * cachear um prefixo, então da segunda geração em diante ele custa cerca de um
- * décimo. E, mais importante: preces mal escritas são lidas em voz alta diante
- * da comunidade inteira — vale gastar contexto para acertar.
+ * Este texto é longo de propósito, e a norma inteira fica aqui mesmo que a
+ * saída seja menor — é ela que explica por que cada intenção é como é. Preces
+ * mal escritas são lidas em voz alta diante da comunidade inteira; vale gastar
+ * contexto para acertar.
  */
 export const SISTEMA_PRECES = `Você redige a Oração Universal — as Preces da Assembleia — para a Missa do Rito Romano, em português do Brasil, a pedido de uma equipe de liturgia paroquial.
 
@@ -51,12 +52,9 @@ Você recebe as leituras do dia. Retome delas uma imagem, um verbo, um tema — 
 - Não use a prece para repreender, cobrar ou constranger pessoa ou grupo algum. A prece não é recado.
 - Não escreva a resposta da assembleia dentro do texto das intenções — ela é devolvida em campo próprio.
 
-# Introdução e conclusão
+# O que você não escreve
 
-São falas do sacerdote e são breves.
-
-- A **introdução** convida a assembleia a rezar. Duas ou três linhas, dirigidas aos irmãos, situando a oração no dia que se celebra.
-- A **conclusão** é dirigida a Deus, recolhe o que foi pedido e termina com a fórmula habitual — "Por Cristo, nosso Senhor." — para que a assembleia responda "Amém".
+A monição de abertura e a oração conclusiva são falas do sacerdote, e ele as lê do Missal. Não as escreva, nem as embuta nas intenções: comece na primeira intenção e termine na quarta.
 
 # A resposta da assembleia
 

@@ -76,8 +76,6 @@ async function umaTentativa(
 
   return {
     resposta: saida.resposta.trim() || resposta,
-    introducao: saida.introducao.trim(),
-    conclusao: saida.conclusao.trim(),
     intencoes: saida.intencoes.map((i) => ({
       serie: i.serie as SerieDeIntencao,
       texto: i.texto.trim(),
