@@ -64,16 +64,25 @@ Hosana nas alturas!`,
 };
 
 /**
- * As três fórmulas do Mistério da Fé. O sacerdote escolhe uma; a assembleia
- * responde a que ele puxar — por isso as três aparecem juntas na tela.
+ * As três fórmulas do Mistério da Fé — cada convite com a sua resposta.
+ *
+ * O pareamento é a informação que importa, e é o que estava errado aqui antes:
+ * havia um convite só, seguido das três respostas soltas. Mas a resposta não é
+ * escolha da assembleia — ela é determinada pelo convite que o sacerdote puxa.
+ * Listadas soltas, a assembleia hesita exatamente no instante em que deveria
+ * responder de imediato, logo após a elevação do cálice.
+ *
+ * O convite antigo, "Eis o mistério da fé", era o da tradução anterior e não
+ * está mais no Missal: a 3ª edição típica em português traz as três fórmulas
+ * abaixo. Por isso os pares vão emparelhados e com o mesmo título.
  */
 export const MISTERIO_DA_FE: Secao[] = [
   {
-    id: 'misterio-convite',
-    titulo: 'Mistério da Fé',
+    id: 'misterio-convite-1',
+    titulo: 'Mistério da Fé — 1ª fórmula',
     quem: 'presidente',
-    incipit: 'Eis o mistério da fé!',
-    nota: 'Logo após a elevação do cálice.',
+    incipit: 'Mistério da fé!',
+    nota: 'Logo após a elevação do cálice. O sacerdote escolhe uma das três fórmulas; a assembleia responde a que corresponde a ela.',
   },
   {
     id: 'misterio-r1',
@@ -84,6 +93,12 @@ e proclamamos a vossa ressurreição.
 Vinde, Senhor Jesus!`,
   },
   {
+    id: 'misterio-convite-2',
+    titulo: 'Mistério da Fé — 2ª fórmula',
+    quem: 'presidente',
+    incipit: 'Mistério da fé e do amor!',
+  },
+  {
     id: 'misterio-r2',
     titulo: 'Mistério da Fé — 2ª fórmula',
     quem: 'assembleia',
@@ -91,6 +106,12 @@ Vinde, Senhor Jesus!`,
 e bebemos deste cálice,
 anunciamos, Senhor, a vossa morte,
 enquanto esperamos a vossa vinda!`,
+  },
+  {
+    id: 'misterio-convite-3',
+    titulo: 'Mistério da Fé — 3ª fórmula',
+    quem: 'presidente',
+    incipit: 'Mistério da fé para a salvação do mundo!',
   },
   {
     id: 'misterio-r3',

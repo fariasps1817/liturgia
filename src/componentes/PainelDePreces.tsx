@@ -140,13 +140,6 @@ export function PainelDePreces({ data, dataExtenso }: { data: string; dataExtens
 
       {estado === 'formulario' ? (
         <>
-          <Cartao className="mb-3">
-            <p className="text-sm text-tinta-suave">
-              As preces seguem as quatro séries que o Missal define (IGMR 70): pela Igreja, pelos
-              governantes e pelo mundo, pelos que sofrem e pela comunidade — nesta ordem, enraizadas
-              nas leituras do dia.
-            </p>
-          </Cartao>
 
           <div className="space-y-4">
             <div>
