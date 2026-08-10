@@ -236,6 +236,16 @@ function BlocoDaSecao({
         <span className="truncate text-[0.6875rem] uppercase tracking-wide text-tinta-fraca">
           {secao.titulo}
         </span>
+        {/*
+          A marca vale para qualquer seção, não só para as da assembleia: um
+          incipit não conferido é uma deixa que pode estar errada, e usar deixa
+          errada na missa é pior do que não ter deixa nenhuma.
+        */}
+        {secao.conferir ? (
+          <span className="ml-auto shrink-0 rounded-full bg-realce/15 px-2 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide text-realce">
+            conferir
+          </span>
+        ) : null}
       </div>
 
       {resposta ? (

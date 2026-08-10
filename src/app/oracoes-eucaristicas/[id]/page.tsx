@@ -4,7 +4,7 @@ import { AcompanharOracao } from '@/componentes/AcompanharOracao';
 import { IconeSeta } from '@/componentes/icones';
 import { acharOracao, ORACOES_EUCARISTICAS } from '@/dados/oracoes-eucaristicas';
 
-/* Conteúdo fixo: pré-renderiza as três, para abrirem sem rede. */
+/* Conteúdo fixo: pré-renderiza todas, para abrirem sem rede. */
 export function generateStaticParams() {
   return ORACOES_EUCARISTICAS.map((oracao) => ({ id: oracao.id }));
 }
