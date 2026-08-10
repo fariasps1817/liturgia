@@ -92,7 +92,14 @@ Três decisões que explicam o resto:
 
 **Oração Eucarística V.** As aclamações próprias dela ainda precisam ser transcritas do Missal impresso da paróquia — estão marcadas na tela. As respostas comuns (diálogo, Santo, Mistério da Fé e Amém) estão corretas nas três orações.
 
-**Texto do Missal.** Por padrão o app traz as respostas da assembleia na íntegra e só as primeiras palavras das falas do celebrante, como deixa. Os direitos do Missal em português são da CNBB; para exibir o texto presidencial completo é preciso autorização escrita — e então ligar `MOSTRAR_TEXTO_PRESIDENCIAL`.
+**Texto do Missal.** O app traz as respostas da assembleia na íntegra e, das falas do celebrante, só as primeiras palavras, como deixa. **O texto do Missal não vem no app** — nenhuma fala do celebrante tem o texto integral guardado.
+
+Para tê-lo, são dois passos, nesta ordem:
+
+1. Preencher `texto` nas seções do celebrante em `src/dados/oracoes-eucaristicas/index.ts`, copiando do Missal da paróquia.
+2. Pôr `MOSTRAR_TEXTO_PRESIDENCIAL=true` no `.env.local` e reiniciar.
+
+Sem o passo 2 o texto é removido no servidor e não chega ao navegador — nem no código-fonte da página. Os direitos do Missal em português são da CNBB: para uso interno da equipe tudo bem; para publicar na internet é preciso autorização escrita.
 
 **Chave PIX.** O código gerado passa nas verificações, mas **cole o "Copia e Cola" num app de banco de verdade antes de publicar**. Erro de CRC16 é o defeito mais comum nessa implementação e só aparece aí.
 

@@ -3,6 +3,10 @@ import { notFound } from 'next/navigation';
 import { AcompanharOracao } from '@/componentes/AcompanharOracao';
 import { IconeSeta } from '@/componentes/icones';
 import { acharOracao, ORACOES_EUCARISTICAS } from '@/dados/oracoes-eucaristicas';
+import {
+  aplicarTextoPresidencial,
+  mostrarTextoPresidencial,
+} from '@/dados/oracoes-eucaristicas/presidencial';
 
 /* Conteúdo fixo: pré-renderiza todas, para abrirem sem rede. */
 export function generateStaticParams() {
@@ -16,8 +20,14 @@ export async function generateMetadata({ params }: PageProps<'/oracoes-eucaristi
 
 export default async function PaginaDaOracao({ params }: PageProps<'/oracoes-eucaristicas/[id]'>) {
   const { id } = await params;
-  const oracao = acharOracao(id);
-  if (!oracao) notFound();
+  const encontrada = acharOracao(id);
+  if (!encontrada) notFound();
+
+  /*
+   * O corte acontece aqui, no servidor: sem a autorização da CNBB, o texto
+   * integral das falas do celebrante não chega sequer ao navegador.
+   */
+  const oracao = aplicarTextoPresidencial(encontrada, mostrarTextoPresidencial());
 
   return (
     <>

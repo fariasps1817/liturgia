@@ -14,7 +14,16 @@
  *
  *   npm run verificar
  */
-import { ORACOES_EUCARISTICAS, ehResposta, type Secao } from '../src/dados/oracoes-eucaristicas';
+import {
+  ORACOES_EUCARISTICAS,
+  ehResposta,
+  type OracaoEucaristica,
+  type Secao,
+} from '../src/dados/oracoes-eucaristicas';
+import {
+  aplicarTextoPresidencial,
+  mostrarTextoPresidencial,
+} from '../src/dados/oracoes-eucaristicas/presidencial';
 
 let falhas = 0;
 let total = 0;
@@ -110,6 +119,42 @@ console.log('\n— Fórmulas que saíram do Missal não podem voltar —');
   const todas: Secao[] = ORACOES_EUCARISTICAS.flatMap((o) => o.secoes);
   const tudo = todas.map((s) => `${s.titulo} ${s.incipit ?? ''} ${s.texto ?? ''}`).join(' ');
   conferir('"Eis o mistério da fé" não aparece', /Eis o mist[ée]rio da f[ée]/i.test(tudo), false);
+}
+
+console.log('\n— A chave do texto presidencial —');
+{
+  /*
+   * Uma oração fictícia, para não depender do que os dados trazem hoje: se um
+   * dia alguém preencher `texto` numa fala do celebrante, é esta conferência
+   * que garante que ele não vaza com a chave desligada.
+   */
+  const comTexto: OracaoEucaristica = {
+    id: 'teste',
+    numero: 'X',
+    nome: 'Oração de teste',
+    quando: 'Só para conferência.',
+    secoes: [
+      { id: 't-presidente', titulo: 'Fala do celebrante', quem: 'presidente', incipit: 'Na verdade…', texto: 'TEXTO INTEGRAL DO MISSAL' },
+      { id: 't-assembleia', titulo: 'Resposta', quem: 'assembleia', texto: 'Amém!' },
+    ],
+  };
+
+  const desligada = aplicarTextoPresidencial(comTexto, false);
+  const serializada = JSON.stringify(desligada);
+  conferir('desligada: o texto do celebrante some', /TEXTO INTEGRAL DO MISSAL/.test(serializada), false);
+  conferir('desligada: a deixa continua', desligada.secoes[0].incipit, 'Na verdade…');
+  conferir('desligada: a resposta da assembleia fica intacta', desligada.secoes[1].texto, 'Amém!');
+
+  const ligada = aplicarTextoPresidencial(comTexto, true);
+  conferir('ligada: o texto do celebrante aparece', ligada.secoes[0].texto, 'TEXTO INTEGRAL DO MISSAL');
+
+  // Só o literal "true" liga. Um "1" ou "sim" esquecido no .env não pode
+  // publicar o Missal inteiro sem querer.
+  for (const valor of ['true', 'false', '1', 'sim', 'TRUE', '', undefined]) {
+    if (valor === undefined) delete process.env.MOSTRAR_TEXTO_PRESIDENCIAL;
+    else process.env.MOSTRAR_TEXTO_PRESIDENCIAL = valor;
+    conferir(`chave = ${JSON.stringify(valor)}`, mostrarTextoPresidencial(), valor === 'true');
+  }
 }
 
 console.log('\n— Quem tem seção a conferir avisa no topo —');
