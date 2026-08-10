@@ -7,15 +7,16 @@
  * pessoa insistir num botão que nunca vai funcionar.
  */
 
-import { APIError } from '@anthropic-ai/sdk';
+import { APIError } from 'openai';
 
 export class ErroAoGerarPreces extends Error {}
 
-/** Mensagem que a Anthropic mandou no corpo do erro, quando mandou alguma. */
+/** Mensagem que a OpenAI mandou no corpo do erro, quando mandou alguma. */
 function detalheDaApi(erro: APIError): string {
-  const corpo = erro.error as { error?: { message?: unknown } } | undefined;
-  const mensagem = corpo?.error?.message;
-  return typeof mensagem === 'string' ? mensagem : '';
+  const corpo = erro.error as { message?: unknown } | undefined;
+  const mensagem = corpo?.message;
+  if (typeof mensagem === 'string') return mensagem;
+  return typeof erro.message === 'string' ? erro.message : '';
 }
 
 /**
@@ -32,23 +33,28 @@ export function traduzirErroDaApi(erro: unknown, modelo: string): never {
   if (!(erro instanceof APIError)) throw erro;
 
   const detalhe = detalheDaApi(erro);
+  const codigo = erro.code ?? '';
 
-  // Sem créditos vem como 400 invalid_request_error, não como 402.
-  if (/credit balance|billing|quota|insufficient/i.test(detalhe)) {
+  /*
+   * A pegadinha da OpenAI: conta sem saldo e excesso de pedidos chegam os dois
+   * como 429. Só o código separa os dois — e eles pedem coisas opostas de quem
+   * está na sacristia. Por isso o saldo é conferido antes do status.
+   */
+  if (codigo === 'insufficient_quota' || /quota|billing|credit balance/i.test(detalhe)) {
     throw new ErroAoGerarPreces(
-      'A conta da Anthropic está sem créditos. Adicione créditos em console.anthropic.com, ' +
-        'em Plans & Billing — tentar de novo não resolve.',
+      'A conta da OpenAI está sem créditos. Adicione créditos em platform.openai.com, ' +
+        'em Billing — tentar de novo não resolve.',
     );
   }
 
-  if (erro.status === 401 || erro.status === 403) {
+  if (erro.status === 401 || erro.status === 403 || codigo === 'invalid_api_key') {
     throw new ErroAoGerarPreces(
-      'A chave da IA foi recusada pela Anthropic. Confira ANTHROPIC_API_KEY no servidor — ' +
+      'A chave da IA foi recusada pela OpenAI. Confira OPENAI_API_KEY no servidor — ' +
         'tentar de novo não resolve.',
     );
   }
 
-  if (erro.status === 404 && /model/i.test(detalhe)) {
+  if (codigo === 'model_not_found' || (erro.status === 404 && /model/i.test(detalhe))) {
     throw new ErroAoGerarPreces(
       `O modelo "${modelo}" não existe ou não está liberado para esta chave. Confira MODELO_IA.`,
     );
@@ -56,18 +62,18 @@ export function traduzirErroDaApi(erro: unknown, modelo: string): never {
 
   if (erro.status === 429) {
     throw new ErroAoGerarPreces(
-      'A Anthropic está limitando os pedidos agora. Espere um minuto e gere de novo.',
+      'A OpenAI está limitando os pedidos agora. Espere um minuto e gere de novo.',
     );
   }
 
-  if (erro.status >= 500) {
+  if (typeof erro.status === 'number' && erro.status >= 500) {
     throw new ErroAoGerarPreces(
-      'A Anthropic está fora do ar ou sobrecarregada. Tente de novo em instantes.',
+      'A OpenAI está fora do ar ou sobrecarregada. Tente de novo em instantes.',
     );
   }
 
   // Só sobra o que não previmos: repassa o que veio, que é melhor que silêncio.
   throw new ErroAoGerarPreces(
-    `A Anthropic recusou o pedido${erro.status ? ` (${erro.status})` : ''}.${detalhe ? ` ${detalhe}` : ''}`,
+    `A OpenAI recusou o pedido${erro.status ? ` (${erro.status})` : ''}.${detalhe ? ` ${detalhe}` : ''}`,
   );
 }

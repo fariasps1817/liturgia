@@ -4,13 +4,13 @@ import { ORDEM_DAS_SERIES } from './tipos';
 /**
  * Formato da resposta do modelo.
  *
- * Vai como saída estruturada (`output_config.format`), então o JSON chega válido
- * e já tipado — sem regex, sem tentar reparar texto quebrado.
+ * Vai como saída estruturada (`response_format`), então o JSON chega válido e já
+ * tipado — sem regex, sem tentar reparar texto quebrado.
  *
- * A API não aceita restrições de tamanho de lista no JSON Schema; o SDK remove
- * essas restrições do schema enviado e as valida aqui no cliente. É por isso que
- * `.length(4)` funciona mesmo assim — e por que `gerar.ts` ainda faz uma segunda
- * tentativa quando a validação reprova.
+ * O modo estrito da OpenAI não aceita `minItems`/`maxItems`: mandar `.length(4)`
+ * aqui faria a API recusar o schema inteiro com 400. Por isso a quantidade de
+ * intenções é exigida em palavras, na descrição, e conferida em `gerar.ts` —
+ * que tenta de novo quando as quatro séries não vêm completas e na ordem.
  */
 export const EsquemaDasPreces = z.object({
   resposta: z
@@ -30,8 +30,10 @@ export const EsquemaDasPreces = z.object({
           .describe('A intenção proclamada pelo leitor, sem a resposta da assembleia.'),
       }),
     )
-    .length(4)
-    .describe('Exatamente quatro intenções, uma por série, na ordem da IGMR 70.'),
+    .describe(
+      'Exatamente quatro intenções: uma para cada série da IGMR 70, na ordem ' +
+        `${ORDEM_DAS_SERIES.join(', ')}. Nem mais, nem menos, sem repetir série.`,
+    ),
   conclusao: z
     .string()
     .describe(

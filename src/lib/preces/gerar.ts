@@ -1,36 +1,35 @@
 import 'server-only';
 
-import Anthropic from '@anthropic-ai/sdk';
-import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
+import OpenAI from 'openai';
+import { zodResponseFormat } from 'openai/helpers/zod';
 import type { LiturgiaDoDia } from '../liturgia/tipos';
 import { ErroAoGerarPreces, traduzirErroDaApi } from './erros';
 import { EsquemaDasPreces } from './esquema';
 import { montarPromptDoDia, SISTEMA_PRECES } from './prompt';
 import { ORDEM_DAS_SERIES, RESPOSTA_PADRAO, type ConteudoDasPreces, type SerieDeIntencao } from './tipos';
 
-export const MODELO = process.env.MODELO_IA ?? 'claude-opus-5';
+export const MODELO = process.env.MODELO_IA ?? 'gpt-4o-mini';
 
 /*
- * No Claude Opus 5 o raciocínio vem ligado por padrão e consome o mesmo
- * `max_tokens` do texto final. As preces em si ocupam menos de mil tokens, mas
- * apertar aqui trunca a resposta no meio da quarta intenção — que é justamente
- * a mais importante para a comunidade.
+ * As preces inteiras ocupam menos de mil tokens. A folga existe para o caso de
+ * o modelo alongar as intenções: apertar aqui trunca a resposta no meio da
+ * quarta — que é justamente a mais importante para a comunidade.
  */
-const MAX_TOKENS = 16_000;
+const MAX_TOKENS = 4_000;
 
 // Reexportado porque a rota sempre importou o erro daqui, e quem gera preces
 // não precisa saber que a tradução das falhas mora noutro arquivo.
 export { ErroAoGerarPreces };
 
-let clientePreguicoso: Anthropic | null = null;
+let clientePreguicoso: OpenAI | null = null;
 
-function cliente(): Anthropic {
-  if (!process.env.ANTHROPIC_API_KEY) {
+function cliente(): OpenAI {
+  if (!process.env.OPENAI_API_KEY) {
     throw new ErroAoGerarPreces(
-      'A chave da IA não está configurada no servidor. Defina ANTHROPIC_API_KEY para gerar preces.',
+      'A chave da IA não está configurada no servidor. Defina OPENAI_API_KEY para gerar preces.',
     );
   }
-  clientePreguicoso ??= new Anthropic();
+  clientePreguicoso ??= new OpenAI();
   return clientePreguicoso;
 }
 
@@ -42,36 +41,35 @@ async function umaTentativa(
 ): Promise<ConteudoDasPreces> {
   const prompt = montarPromptDoDia(liturgia, resposta, intencaoLocal);
 
-  const mensagem = await cliente()
-    .messages.parse({
+  const resultado = await cliente()
+    .chat.completions.parse({
       model: MODELO,
-      max_tokens: MAX_TOKENS,
-      // O prompt de sistema é estável entre gerações; marcá-lo faz o cache do
-      // prefixo valer a partir da segunda missa do dia.
-      system: [
-        { type: 'text', text: SISTEMA_PRECES, cache_control: { type: 'ephemeral' } },
+      max_completion_tokens: MAX_TOKENS,
+      // O prompt de sistema é estável entre gerações. A OpenAI reaproveita o
+      // prefixo sozinha, sem precisar marcar nada — só precisa vir primeiro.
+      messages: [
+        { role: 'system', content: SISTEMA_PRECES },
+        { role: 'user', content: reforco ? `${prompt}\n\n${reforco}` : prompt },
       ],
-      output_config: {
-        effort: 'medium',
-        format: zodOutputFormat(EsquemaDasPreces),
-      },
-      messages: [{ role: 'user', content: reforco ? `${prompt}\n\n${reforco}` : prompt }],
+      response_format: zodResponseFormat(EsquemaDasPreces, 'preces'),
     })
     .catch((causa) => traduzirErroDaApi(causa, MODELO));
 
-  // O Opus 5 pode recusar por classificadores de segurança. Em texto litúrgico
-  // isso é remotíssimo, mas ler `content` sem conferir quebraria a tela.
-  if (mensagem.stop_reason === 'refusal') {
+  const escolha = resultado.choices[0];
+
+  // O modelo pode recusar por classificadores de segurança. Em texto litúrgico
+  // isso é remotíssimo, mas ler `parsed` sem conferir quebraria a tela.
+  if (escolha?.message.refusal) {
     throw new ErroAoGerarPreces(
       'O modelo recusou este pedido. Revise a intenção da comunidade e tente de novo.',
     );
   }
 
-  if (mensagem.stop_reason === 'max_tokens') {
+  if (escolha?.finish_reason === 'length') {
     throw new ErroAoGerarPreces('A resposta veio cortada. Tente gerar de novo.');
   }
 
-  const saida = mensagem.parsed_output;
+  const saida = escolha?.message.parsed;
   if (!saida) {
     throw new ErroAoGerarPreces('A resposta do modelo não veio no formato esperado.');
   }

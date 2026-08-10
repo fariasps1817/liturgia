@@ -27,7 +27,7 @@ npm run dev
 
 Abre em <http://localhost:3000>. Para testar no celular, use o IP da máquina na rede local.
 
-Sem `ANTHROPIC_API_KEY` tudo funciona, menos gerar preces — que avisa em vez de quebrar.
+Sem `OPENAI_API_KEY` tudo funciona, menos gerar preces — que avisa em vez de quebrar.
 
 ---
 
@@ -58,7 +58,8 @@ src/
   lib/preces/
     prompt.ts       Prompt ancorado na IGMR 69-71
     esquema.ts      Formato da saída estruturada
-    gerar.ts        Chamada ao Claude
+    gerar.ts        Chamada à OpenAI
+    erros.ts        Traduz as falhas da API para o que a equipe faz a respeito
     repositorio.ts  Banco (Turso em produção, SQLite local em dev)
   lib/pix/brcode.ts BR Code EMV MPM + CRC16
   dados/oracoes-eucaristicas/
@@ -80,7 +81,7 @@ Três decisões que explicam o resto:
 ## Publicando na Vercel
 
 1. Importe o repositório na Vercel.
-2. Configure as variáveis de `.env.example` (mínimo: `ANTHROPIC_API_KEY`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`).
+2. Configure as variáveis de `.env.example` (mínimo: `OPENAI_API_KEY`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`).
 3. Faça o deploy. A versão em **Ajustes** vem do commit automaticamente.
 
 ---
